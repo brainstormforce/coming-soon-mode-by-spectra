@@ -6,7 +6,7 @@ function csmp_settings_page_html() {
     }
     ?>
         <div class="wrap">
-            <h1 style="padding:10px; background:#333;color:#fff"><?= esc_html(get_admin_page_title()); ?></h1>
+            <h1><?= esc_html(get_admin_page_title()); ?></h1>
             <form action="options.php" method="post">
                 <?php 
                     settings_fields( 'csmp-settings' );
@@ -21,7 +21,7 @@ function csmp_settings_page_html() {
 
 //This function only for showing Top Level Administration Menu
 function csmp_register_menu_page() {
-    add_menu_page( 'Coming Soon Mode Plugin System', 'Coming Soon Mode', 'manage_options', 'csmp-settings', 'csmp_settings_page_html', 'dashicons-hammer', 30 );
+    add_menu_page( 'Coming Soon Mode System', 'Coming Soon Mode', 'manage_options', 'csmp-settings', 'csmp_settings_page_html', 'dashicons-hammer', 30 );
 }
 add_action('admin_menu', 'csmp_register_menu_page');
 
@@ -33,31 +33,34 @@ add_action('admin_menu', 'csmp_register_menu_page'); */
 
 function csmp_plugin_settings(){
 
-    // register 2 new settings for "csmp-settings" page
-    register_setting( 'csmp-settings', 'cmps_Activate_btn_label' );
-    register_setting( 'csmp-settings', 'csmp_Deactivate_btn_label' );
-
     // register a new section in the "wpac-setings" page
-    add_settings_section( 'csmp_label_settings_section', 'CSMP Options', 'csmp_plugin_settings_section_cb', 'csmp-settings' );
+    add_settings_section( 'csmp_label_settings_section', 'What you want to do. Just Select
+    ', 'csmp_plugin_settings_section_cb', 'csmp-settings' );
 
-    // register a new field in the "csmp-settings" page
-    add_settings_field( 'wpac_like_label_field', 'Activate Maintenence Mode', 'csmp_like_label_field_cb', 'csmp-settings', 'csmp_label_settings_section' );
-    // register a new field in the "csmp-settings" page
-    add_settings_field( 'wpac_dislike_label_field', 'Deactivate Maintenence Mode', 'csmp_deactivate_label_field_cb', 'csmp-settings', 'csmp_label_settings_section' );
 }
 add_action('admin_init', 'csmp_plugin_settings');
 
 // Section 
 function csmp_plugin_settings_section_cb(){
-    echo '<h1>What you want to do. Just Select</h1>
-    <div class="custom-select" style="width:200px;">
-    <select>
-      <option value="1">Coming Soon</option>
-      <option value="2">Maintainance</option>
-      <option value="3">Live</option>
-    </select>
-  </div> 
-    ';
+    echo '<div class="container">
+    <div class="field">
+      <p class="control">
+        <label class="checkbox">
+          <input type="checkbox" id="Check1" value="Value1" onclick="selectOnlyThis(this.id)" /> Live
+        </label>
+      </p>
+          <p class="control">
+        <label class="checkbox">
+          <input type="checkbox" id="Check2" value="Value1" onclick="selectOnlyThis(this.id)" /> Maintenance Mode
+        </label>
+      </p>
+      <p class="control">
+        <label class="checkbox">
+    <input type="checkbox" id="Check3" value="Value1" onclick="selectOnlyThis(this.id)" /> Coming Soon Mode
+        </label>
+      </p>
+    </div>
+  </div>';
 }
 
 // callback function

@@ -34,4 +34,21 @@ if( !function_exists('csmp_plugin_scripts')) {
 
 //Settings Menu & Page
 require plugin_dir_path( __FILE__ ). 'inc/settings.php';
+
+if ( ! function_exists( 'wpkoder_admin_bar_under_construction_notice' ) ) {
+    function wpkoder_admin_bar_under_construction_notice() {
+        global $wp_admin_bar;
+        $wpkoder_enable_under_maintenance = get_theme_mod('enable_under_maintenance', 0 );
+        if ( $wpkoder_enable_under_maintenance == 1 ) {
+            $wp_admin_bar->add_menu( array(
+                'id'     => 'admin-bar-under-construction-notice',
+                'parent' => 'top-secondary',
+                'href'   => esc_url( home_url( '/' ) ).'wp-admin/customize.php?autofocus%5Bsection%5D=add_under_maintenance_section',
+                'title'  => '<span style="color: #FF0000;">'.esc_html__( 'Under Construction', 'easy-maintenance-mode' ).'</span>'
+            ) );
+        }
+    }
+}
+add_action( 'admin_bar_menu', 'wpkoder_admin_bar_under_construction_notice' );
+
 ?>
