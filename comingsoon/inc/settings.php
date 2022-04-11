@@ -1,29 +1,87 @@
 <?php
-function csmp_settings_page_html() {
-    // if current user have admin access.then only he can acces this page otherwise not
-    if(!is_admin()) {
-        return;
-    }
-    ?>
-        <div class="wrap">
-            <h1><?= esc_html(get_admin_page_title()); ?></h1>
-            <form action="options.php" method="post">
-                <?php 
-                    settings_fields( 'csmp-settings' );
-                    do_settings_sections( 'csmp-settings' );
-                    submit_button( 'Save Changes' );
-                ?>
-            </form>
-        </div>
-    <?
-
-}
 
 //This function only for showing Top Level Administration Menu
 function csmp_register_menu_page() {
     add_menu_page( 'Coming Soon Mode System', 'Coming Soon Mode', 'manage_options', 'csmp-settings', 'csmp_settings_page_html', 'dashicons-hammer', 30 );
 }
 add_action('admin_menu', 'csmp_register_menu_page');
+
+// maintenance mode code
+function maintenance_mode() {
+  if ( !current_user_can( 'administrator' ) ) {
+    wp_die('Thanks for visiting Brainstronforce site, But We are doing some maintenance work. So Please Visit after some time .');
+  }
+}
+add_action('get_header', 'maintenance_mode');
+
+// 
+
+function csmp_settings_page_html() {
+    // if current user have admin access.then only he can acces this page otherwise not
+    if(!is_admin()) {
+        return;
+    }
+    ?>
+
+<div class="wrap">
+            <h1><?= esc_html(get_admin_page_title()); ?></h1>
+            <form action="options.php" method="post">
+                <?php 
+                    settings_fields( 'csmp-settings' );
+                    do_settings_sections( 'csmp-settings' );
+                ?>
+            </form>
+        </div>
+<!-- chooes page for display -->
+    <div style="margin-top: 10px;">
+    <h2>Choose Page</h2>
+        <select name="page-dropdown"
+    onchange=''> 
+    <option value=""><?php echo attribute_escape(__('Choose page')); ?></option> 
+    <?php 
+        $pages = get_pages(); 
+        foreach ($pages as $pagg) {
+            $option = '<option value="'.get_page_link($pagg->ID).'">';
+            $option .= $pagg->post_title;
+            $option .= '</option>';
+            echo $option;
+        }
+    ?>
+</select>
+    </div>
+    <!--  -->
+    
+    <!-- for custom option to allow who's able to accesse the live site  -->
+    <div style="margin-top: 10px;">
+    <h2>Who Can Access Live Site</h2>
+    <select type="checkbox" id="roles" name="roles" class="fre-chosen-single">
+  <?php
+     foreach (get_editable_roles() as  $role_name => $role_info) {
+       echo '<option value="'.$role_name.'">' . $role_info['name'] . '</option>';
+     }?>
+  </select>
+    </div>
+
+    <div>
+        <h2>Theme Compatibility</h2>
+        <form action="/action_page.php">
+  <input type="checkbox">
+  <label for="vehicle1">Disable Header</label><br>
+  <input type="checkbox">
+  <label for="vehicle1">Disable Footer</label><br>
+  <input type="checkbox">
+  <label for="vehicle1">Disable Sidebar</label><br>
+  <input type="checkbox">
+  <label for="vehicle1">Load only Content Area</label>
+</form>
+    </div>
+<!--  -->
+
+    <?
+        submit_button( 'Save Changes' );
+}
+
+
 
 function csmp_plugin_settings(){
     // register a new section in the "wpac-setings" page
@@ -35,79 +93,13 @@ add_action('admin_init', 'csmp_plugin_settings');
 // Section 
 function csmp_plugin_settings_section_cb(){
     echo '
-    <div class="custom-select" style="width:200px;">
+    <div class="custom-select" style="width:100%;">
     <select>
      <option value="1">Live</option>
       <option value="2">Coming Soon</option>
       <option value="3">Maintainance</option>
     </select>
-    <div>
-    <h2>Choose Page</h2>
-    <div class="custom-select" style="width:200px;">
-    <select>
-    <option value="0">Homepage</option>
-    <option value="1">About Us</option>
-    <option value="2">Contact Us</option>
-    <option value="3">Blog</option>
-    <option value="4">Review & Deals</option>
-    </select>
-    </div>
-    <div>
-    <h2>Who Can Access Live Site</h2>
-    <div id="list1" class="dropdown-check-list" tabindex="100">
-  <span class="anchor">Custom</span>
-  <ul class="items">
-    <li><input type="checkbox" />Administrator</li>
-    <li><input type="checkbox" />Editor</li>
-    <li><input type="checkbox" />Author</li>
-    <li><input type="checkbox" />Subscriber</li>
-  </ul>
-  
-</div>
-    </div>
-  </div> 
+    </div> 
     ';
 }
 
-// callback function
-function csmp_like_label_field_cb(){ 
-    $setting = get_option('cmps_activate_btn_label');
-    ?>
-    <input type="text" name="cmps_activate_btn_label" value="<?php echo isset( $setting ) ? esc_attr( $setting ) : ''; ?>">
-    <?php
-}
-
-function csmp_deactivate_label_field_cb(){ 
-    // get the value of the setting we've registered with register_setting()
-    $setting = get_option('csmp_deactivae_btn_label');
-    // output the field
-    ?>
-    <input type="text" name="csmp_deactivae_btn_label" value="<?php echo isset( $setting ) ? esc_attr( $setting ) : ''; ?>">
-    <?php
-} 
-
-// <?php
-// $page_titles = array();
-// $args = array(
-//     'post_type' => 'page',
-//     'posts_per_page' => -1
-// );
-
-// $the_query = new WP_Query( $args ); 
-
-// // If there are pages, let's loop
-// if($the_query->have_posts()):  
-//     while($the_query->have_posts()):
-//         $the_query->the_post(); 
-//         $page_titles[] = get_the_title();  // Add each page title to your array
-//     endwhile; 
-
-// else : 
-//     // Do stuff if no pages
-// endif;
-
-// // Display array contents
-// echo '<pre>';
-// print_r($page_titles);
-// echo '</pre>';
-// ?
