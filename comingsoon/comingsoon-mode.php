@@ -9,11 +9,11 @@
 * License: GPL2
 * Text Domain: csmp
 */
+?>
+<?php
 
-//If this file is called directly, abort.
-if (!defined( 'WPINC' )) {
-    die;
-}
+//If this file is called directly, abort. 
+	if ( !defined( 'ABSPATH' ) ) { exit; }
 
 //Define Constants
 if ( !defined('CSMP_PLUGIN_VERSION')) {
@@ -22,6 +22,7 @@ if ( !defined('CSMP_PLUGIN_VERSION')) {
 if ( !defined('CSMP_PLUGIN_DIR')) {
     define('CSMP_PLUGIN_DIR', plugin_dir_url( __FILE__ ));
 }
+
 
 //Include Scripts & Styles
 if( !function_exists('csmp_plugin_scripts')) {
@@ -34,6 +35,8 @@ if( !function_exists('csmp_plugin_scripts')) {
 
 //Settings Menu & Page
 require plugin_dir_path( __FILE__ ). 'inc/settings.php';
+
+// under construction red menu bar
 
 if ( ! function_exists( 'wpkoder_admin_bar_under_construction_notice' ) ) {
     function wpkoder_admin_bar_under_construction_notice() {

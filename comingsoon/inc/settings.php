@@ -14,6 +14,7 @@ function maintenance_mode() {
 }
 add_action('get_header', 'maintenance_mode');
 
+
 // 
 
 function csmp_settings_page_html() {
@@ -102,4 +103,5 @@ function csmp_plugin_settings_section_cb(){
     </div> 
     ';
 }
+
 
