@@ -38,7 +38,7 @@ function csm_settings(){
                                 <label><input type="radio" name="csm_mode" value="live" <?php echo $csm_mode == 'live' ? 'checked':''; ?> /> <?php _e('Live', 'csm')?></label><br />
                             </td>
                         </tr>
-                        <tr valign="top">
+                        <tr valign="top" class="csm-choose-page" style="display:<?php echo $csm_mode == 'live' ? 'none' : 'block'; ?>">
                             <th scope="row"><?php _e('Choose Page', 'csm'); ?>:</th>
                             <td>  
                                  
@@ -54,7 +54,7 @@ function csm_settings(){
                             ?> 
                             </td>
                         </tr>
-                        <tr valign="top">
+                        <tr valign="top" class="csm-who-can-access" style="display:<?php echo $csm_mode == 'live' ? 'none' : 'block'; ?>">
                             <th scope="row"><?php _e('Who Can Access Live Site', 'csm'); ?>:</th>
                             <td>   
                             <?php 
@@ -63,7 +63,7 @@ function csm_settings(){
                                 ?> 
                                 <label><input type="radio" name="csm_who_can_access" value="logged" <?php echo $csm_who_can_access == 'logged' ? 'checked':''; ?> /> <?php _e('All logged-in users', 'csm')?></label><br />
                                 <label><input type="radio" name="csm_who_can_access" value="custom" <?php echo $csm_who_can_access == 'custom' ? 'checked':''; ?> /> <?php _e('Custom', 'csm')?></label><br /> 
-                                <div style="margin-left: 30px;margin-top: 10px;">
+                                <div style="margin-left: 30px;margin-top: 10px;display:<?php echo $csm_who_can_access == 'logged' ? 'none' : 'block' ?>" class="csm-custom-roles">
                                 <?php
                                 global $wp_roles;
                                 $roles = $wp_roles->roles; 
@@ -83,7 +83,35 @@ function csm_settings(){
             </div>
         </div>
     </div>
-
+    <script>
+        jQuery(document).ready(function(){
+            jQuery('input[name="csm_mode"]').change(function(){
+                let mode = jQuery(this).val();
+                 
+                if(mode == 'live'){
+                    jQuery('.csm-choose-page').hide();
+                    jQuery('.csm-who-can-access').hide();
+                }
+                else{
+                    jQuery('.csm-choose-page').show();
+                    jQuery('.csm-who-can-access').show();
+                }
+            })
+        })
+        jQuery(document).ready(function(){
+            jQuery('input[name="csm_who_can_access"]').change(function(){
+                let csm_who_can_access = jQuery(this).val();
+                 
+                if(csm_who_can_access == 'logged'){
+                    jQuery('.csm-custom-roles').hide();
+                }
+                else{
+                    jQuery('.csm-custom-roles').show();
+                }
+            })
+        })
+        
+    </script>
 
   
 <?php
