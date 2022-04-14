@@ -1,13 +1,13 @@
 <?php
-/*
-* Plugin Name: Comingsoon Mode
-* Plugin URI: https://brainstormforce.com/
-* Author: Yogesh S
-* Author URI: https://brainstormforce.com/
-* Description: Website maintenance Mode 
-* Version: 1.0.0
-* License: GPL2
-* Text Domain: csmp
+/**
+Plugin Name: YS- Coming Soon Mode
+Plugin URI: 
+Description: 
+Version: 1.0
+Author: Dung Johnny - BSF@gmail.com
+Author URI:
+License: GPLv2 or later
+Text Domain: csm
 */
 define('CSM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) ); 
 require_once( CSM_PLUGIN_DIR . '/admin.php' ); /** Load admin settings */
