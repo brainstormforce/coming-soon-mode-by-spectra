@@ -21,7 +21,7 @@ function csm_settings(){
         <div class="postbox">
             <div class="inside">
                  
-                <form method="post" action="options.php">
+                <form method="post" action="options.php" class="csm-option-form">
                     <?php settings_fields( 'csm-settings' ); ?>
                     <?php do_settings_sections( 'csm-settings' ); ?>
                     <table class="form-table">
@@ -33,12 +33,12 @@ function csm_settings(){
                                 $csm_mode = get_option('csm_mode', 'live');
                                                      
                                 ?> 
-                                <label><input type="radio" name="csm_mode" value="comming-soon" <?php echo $csm_mode == 'comming-soon' ? 'checked':''; ?> /> <?php _e('Coming Soon', 'csm')?></label><br />
-                                <label><input type="radio" name="csm_mode" value="maintainance" <?php echo $csm_mode == 'maintainance' ? 'checked':''; ?> /> <?php _e('Maintainance', 'csm')?></label><br />
                                 <label><input type="radio" name="csm_mode" value="live" <?php echo $csm_mode == 'live' ? 'checked':''; ?> /> <?php _e('Live', 'csm')?></label><br />
+                                <label><input type="radio" name="csm_mode" value="maintainance" <?php echo $csm_mode == 'maintainance' ? 'checked':''; ?> /> <?php _e('Maintainance', 'csm')?></label><br />
+                                <label><input type="radio" name="csm_mode" value="comming-soon" <?php echo $csm_mode == 'comming-soon' ? 'checked':''; ?> /> <?php _e('Coming Soon', 'csm')?></label><br />
                             </td>
                         </tr>
-                        <tr valign="top" class="csm-choose-page" style="display:<?php echo $csm_mode == 'live' ? 'none' : 'block'; ?>">
+                        <tr valign="top" class="csm-choose-page" style="display:<?php echo $csm_mode == 'live' ? 'none' : 'table-row'; ?>">
                             <th scope="row"><?php _e('Choose Page', 'csm'); ?>:</th>
                             <td>  
                                  
@@ -54,7 +54,7 @@ function csm_settings(){
                             ?> 
                             </td>
                         </tr>
-                        <tr valign="top" class="csm-who-can-access" style="display:<?php echo $csm_mode == 'live' ? 'none' : 'block'; ?>">
+                        <tr valign="top" class="csm-who-can-access" style="display:<?php echo $csm_mode == 'live' ? 'none' : 'table-row'; ?>">
                             <th scope="row"><?php _e('Who Can Access Live Site', 'csm'); ?>:</th>
                             <td>   
                             <?php 
@@ -93,8 +93,8 @@ function csm_settings(){
                     jQuery('.csm-who-can-access').hide();
                 }
                 else{
-                    jQuery('.csm-choose-page').show();
-                    jQuery('.csm-who-can-access').show();
+                    jQuery('.csm-choose-page').css('display','table-row');
+                    jQuery('.csm-who-can-access').css('display','table-row');
                 }
             })
         })
@@ -113,6 +113,19 @@ function csm_settings(){
         
     </script>
 
-  
 <?php
 }
+ 
+	
+function cms_admin_style() { 
+ 
+    echo "
+    <style type='text/css'>
+    .csm-option-form label {
+        display: inline-block;
+        margin: 0 0 8px 0;
+    }
+    </style>
+    ";
+}
+add_action( 'admin_head', 'cms_admin_style' );
