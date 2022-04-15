@@ -1,22 +1,24 @@
 <?php
 /**
-Plugin Name: YS- Coming Soon Mode
-Plugin URI: 
-Description: 
+Plugin Name: BSF - Coming Soon Mode
+Plugin URI: https://brainstormforce.com/
+Description: Most lightweight WP maintanence and coming soon plugin ever.
 Version: 1.0
-Author: Dung Johnny - BSF@gmail.com
-Author URI:
+Author: Brainstromforce
+Author URI: https://brainstormforce.com
 License: GPLv2 or later
 Text Domain: csm
 */
 define('CSM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) ); 
-require_once( CSM_PLUGIN_DIR . '/admin.php' ); /** Load admin settings */
+require_once( CSM_PLUGIN_DIR . '/admin.php' ); 
+/** Load admin settings */
    
 add_action('template_redirect', 'csm_redirect');
 function csm_redirect(){
     global $post;
     $redirect_page_id = get_option('csm_show_page');  
-    if ( is_admin() || (int) $post->ID == (int)$redirect_page_id  ) { /** check if in admin panel or current page = page need redirect => do nothing */
+    if ( is_admin() || (int) $post->ID == (int)$redirect_page_id  ) { 
+        /** check if in admin panel or current page = page need redirect => do nothing */
         return;
     }   
       
