@@ -1,11 +1,14 @@
 <?php
+/* add admin menu for plugin */
 function csm_admin_menu()
 {
     add_menu_page(__('Coming Soon Mode', 'csm'), __('Coming Soon Mode - Settings', 'csm'), 'activate_plugins', 'csm-settings', 'csm_settings');
     
 }
 add_action('admin_menu', 'csm_admin_menu');
+/* end */
 
+/** register settings */
 add_action( 'admin_init', 'register_csm_settings' );
 function register_csm_settings() { 
     register_setting( 'csm-settings', 'csm_show_page' ); 
@@ -14,6 +17,7 @@ function register_csm_settings() {
     register_setting( 'csm-settings', 'csm_roles' );
 }
 
+/* show settings form */
 function csm_settings(){
 ?>
     <div class="wrap"><h2><?php _e('Coming Soon Mode Settings', 'obwoos'); ?></h2> </div>
@@ -113,6 +117,7 @@ function csm_settings(){
         
     </script>
 
+  
 <?php
 }
  
