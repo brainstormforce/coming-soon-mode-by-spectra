@@ -1,11 +1,11 @@
 <?php
 /**
-Plugin Name: OB - Coming Soon Mode
-Plugin URI: 
-Description: 
+Plugin Name: BSF - Coming Soon Mode
+Plugin URI: https://brainstormforce.com/
+Description: Most lightweight WP maintanence and coming soon plugin ever.
 Version: 1.0
-Author: Dung Johnny - tdteamvn@gmail.com
-Author URI:
+Author: Brainstromforce
+Author URI: https://brainstormforce.com
 License: GPLv2 or later
 Text Domain: csm
 */
