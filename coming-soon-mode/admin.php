@@ -6,19 +6,87 @@ function csm_admin_menu()
     
 }
 add_action('admin_menu', 'csm_admin_menu');
+add_action('wp_footer',  'showfooter');
 /* end */
 
 /** register settings */
 add_action( 'admin_init', 'register_csm_settings' );
+
+function showfooter(){
+    global $post;
+    
+    $dis_header = get_option('dis_header');
+    $dis_footer = get_option('dis_footer');
+    $dis_sidebar = get_option('dis_sidebar');
+    $loadonly_content = get_option('loadonly_content');
+    $getpage = get_option('csm_show_page');
+    $pageid = $post->ID;
+
+   
+    if ($dis_header == "on" && $pageid == $getpage && !is_user_logged_in()) {
+        echo "<style>
+     .site-header,#site-header, #header,header{
+        display:none !important;
+        }
+        </style>";
+
+    }
+    if ($dis_footer == "on" && $pageid == $getpage && !is_user_logged_in()) {
+        echo "<style>
+     .site-footer,#site-footer, #footer,footer{
+        display:none !important;
+        }
+        </style>";
+
+    }
+    if ($dis_sidebar == "on" && $pageid == $getpage && !is_user_logged_in()) {
+
+        echo "<style>
+      .sidebar-main,.sidebar,#sidebar  .site-sidebar,#site-sidebar{
+           display:none !important;
+           }
+           .content-area,#main,#primary{
+               width:100% !important;
+               margin:0px !important;
+           }
+           </style>";
+   
+
+    }
+    if ($loadonly_content == "on" && $pageid == $getpage && !is_user_logged_in()) {
+        echo "<style>
+     .site-header,#site-header,.sidebar-main, #header,header,#footer,footer,.sidebar,#sidebar  .site-sidebar,#site-sidebar ,.site-footer,#site-footer{
+        display:none !important;
+        }
+        .content-area,#main,#primary{
+            width:100% !important;
+            margin:0px !important;
+        }
+        </style>";
+
+    }
+}
+
 function register_csm_settings() { 
     register_setting( 'csm-settings', 'csm_show_page' ); 
 	register_setting( 'csm-settings', 'csm_mode' );   
     register_setting( 'csm-settings', 'csm_who_can_access' );
     register_setting( 'csm-settings', 'csm_roles' );
+    register_setting( 'csm-settings', 'csm_hide_page' );
+    register_setting( 'csm-settings', 'includePages' );
+    register_setting( 'csm-settings', 'dis_header' );
+    register_setting( 'csm-settings', 'dis_footer' );
+    register_setting( 'csm-settings', 'dis_sidebar' );
+    register_setting( 'csm-settings', 'loadonly_content' );
+    
+
+
 }
 
 /* show settings form */
 function csm_settings(){
+    global $wpdb;
+    $pages = $wpdb->get_results("Select ID, post_title from {$wpdb->posts} where post_type = 'page' and post_status = 'publish'");
 ?>
     <div class="wrap"><h2><?php _e('Coming Soon Mode Settings', 'obwoos'); ?></h2> </div>
     <div class="wrap">
@@ -79,10 +147,50 @@ function csm_settings(){
                                 </div>
                             </td>
                         </tr>
+<!-- Theme Compatibility part starting from here  -->
+                            <th scope="row"><?php _e('Theme Compatibility', 'csm'); ?>:</th>
+                        <tr>
+                <th scope="row">
+                            <td>
+
+<input <?php if (get_option('dis_header')){
+                                    echo 'checked="checked"';
+                                } ?> name="dis_header"  type="checkbox" />
+                        <label for=""><?php _e('Disable Header', 'csm'); ?></label>                            
+                    </td>
+        </td>
+        </tr>
+        <th scope="row">
+                            <td>
+<input <?php if (get_option('dis_footer')){
+                                    echo 'checked="checked"';
+                                } ?> name="dis_footer"  type="checkbox" />
+                        <label for=""><?php _e('Disable Footer', 'csm'); ?></label>                            
+                    </td>
+        </td>
+        </tr>
+        <th scope="row">
+                            <td>
+<input <?php if (get_option('dis_sidebar')){
+                                    echo 'checked="checked"';
+                                } ?> name="dis_sidebar"  type="checkbox" />
+                        <label for=""><?php _e('Disable Sidebar', 'csm'); ?></label>                            
+                    </td>
+        </td>
+        </tr>
+        <th scope="row">
+                            <td>
+<input <?php if (get_option('loadonly_content')){
+                                    echo 'checked="checked"';
+                                } ?> name="loadonly_content"  type="checkbox" />
+                        <label for=""><?php _e('Load Only Content', 'csm'); ?></label>                            
+                    </td>
+        </td>
+        </tr>
+    </tbody>
+</table>
                     </table>
-                    
-                    <?php submit_button(); ?>
-                
+                    <?php submit_button(); ?>        
                 </form>
             </div>
         </div>
@@ -121,9 +229,7 @@ function csm_settings(){
 <?php
 }
  
-	
 function cms_admin_style() { 
- 
     echo "
     <style type='text/css'>
     .csm-option-form label {
