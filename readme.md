@@ -7,7 +7,7 @@ Version: 1.0
 Author: Brainstromforce
 Author URI: https://brainstormforce.com
 License: GPLv2 or later
-Text Domain: csm
+Text Domain: csm.
 
 Description :- Want to add your website in under construction/maintainence mode/coming soon mode while building your website.Then you can use this most lightwright wordpress maintainence mode plugin. & activate your desire mode in just one click. Then your website is only accessible as per your selection either all logged-in user or your selected wordpress user roles. So normal visiter redirect only yout selected page which you chooes. 
 
