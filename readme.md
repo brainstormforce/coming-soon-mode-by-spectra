@@ -13,7 +13,6 @@ Description :- Want to add your website in under construction/maintainence mode/
 
 ## Video Demo:
 
-[youtube http://www.youtube.com/watch?v=eGywhinDNKg]
 
 ## Features
 
