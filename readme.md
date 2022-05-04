@@ -58,3 +58,4 @@ Yes absolutely. This plugin is free.
 Plugin is ready to use.
 
 ## Screenshots
+![coming-soon-mode-1](https://user-images.githubusercontent.com/91533131/166686832-6e5b6230-25cf-4e4a-8a0e-ec63e1175c00.png)
