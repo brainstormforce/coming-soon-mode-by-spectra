@@ -2,8 +2,7 @@
 /* add admin menu for plugin */
 function csm_admin_menu()
 {
-    add_menu_page(__('Coming Soon Mode', 'csm'), __('Coming Soon Mode - Settings', 'csm'), 'activate_plugins', 'csm-settings', 'csm_settings');
-    
+    add_menu_page(__('Coming Soon Mode', 'csm'), __('BSF - Coming Soon Mode', 'csm'), 'activate_plugins', 'csm-settings', 'csm_settings');    
 }
 add_action('admin_menu', 'csm_admin_menu');
 add_action('wp_footer',  'showfooter');
@@ -11,25 +10,21 @@ add_action('wp_footer',  'showfooter');
 
 /** register settings */
 add_action( 'admin_init', 'register_csm_settings' );
-
 function showfooter(){
-    global $post;
-    
+    global $post;    
     $dis_header = get_option('dis_header');
     $dis_footer = get_option('dis_footer');
     $dis_sidebar = get_option('dis_sidebar');
     $loadonly_content = get_option('loadonly_content');
     $getpage = get_option('csm_show_page');
     $pageid = $post->ID;
-
-   
+    /**Theme campitibility section */
     if ($dis_header == "on" && $pageid == $getpage && !is_user_logged_in()) {
         echo "<style>
      .site-header,#site-header, #header,header{
         display:none !important;
         }
         </style>";
-
     }
     if ($dis_footer == "on" && $pageid == $getpage && !is_user_logged_in()) {
         echo "<style>
@@ -37,10 +32,8 @@ function showfooter(){
         display:none !important;
         }
         </style>";
-
     }
     if ($dis_sidebar == "on" && $pageid == $getpage && !is_user_logged_in()) {
-
         echo "<style>
       .sidebar-main,.sidebar,#sidebar  .site-sidebar,#site-sidebar{
            display:none !important;
@@ -50,8 +43,6 @@ function showfooter(){
                margin:0px !important;
            }
            </style>";
-   
-
     }
     if ($loadonly_content == "on" && $pageid == $getpage && !is_user_logged_in()) {
         echo "<style>
@@ -63,7 +54,6 @@ function showfooter(){
             margin:0px !important;
         }
         </style>";
-
     }
 }
 
@@ -78,9 +68,6 @@ function register_csm_settings() {
     register_setting( 'csm-settings', 'dis_footer' );
     register_setting( 'csm-settings', 'dis_sidebar' );
     register_setting( 'csm-settings', 'loadonly_content' );
-    
-
-
 }
 
 /* show settings form */
@@ -88,41 +75,35 @@ function csm_settings(){
     global $wpdb;
     $pages = $wpdb->get_results("Select ID, post_title from {$wpdb->posts} where post_type = 'page' and post_status = 'publish'");
 ?>
-    <div class="wrap"><h2><?php _e('Coming Soon Mode Settings', 'obwoos'); ?></h2> </div>
+    <div class="wrap"><h2><?php _e('BSF - Coming Soon Mode', 'obwoos'); ?></h2> </div>
     <div class="wrap">
         <div class="postbox">
             <div class="inside">
-                 
                 <form method="post" action="options.php" class="csm-option-form">
                     <?php settings_fields( 'csm-settings' ); ?>
                     <?php do_settings_sections( 'csm-settings' ); ?>
                     <table class="form-table">
                         <tr valign="top">
                             <th scope="row"><?php _e('Choose Mode', 'csm'); ?>:</th>
-                            <td>  
-                                 
+                            <td>
                                 <?php 
-                                $csm_mode = get_option('csm_mode', 'live');
-                                                     
-                                ?> 
+                                $csm_mode = get_option('csm_mode', 'live');                     
+                                ?>
                                 <label><input type="radio" name="csm_mode" value="live" <?php echo $csm_mode == 'live' ? 'checked':''; ?> /> <?php _e('Live', 'csm')?></label><br />
                                 <label><input type="radio" name="csm_mode" value="maintainance" <?php echo $csm_mode == 'maintainance' ? 'checked':''; ?> /> <?php _e('Maintainance', 'csm')?></label><br />
                                 <label><input type="radio" name="csm_mode" value="comming-soon" <?php echo $csm_mode == 'comming-soon' ? 'checked':''; ?> /> <?php _e('Coming Soon', 'csm')?></label><br />
                             </td>
                         </tr>
                         <tr valign="top" class="csm-choose-page" style="display:<?php echo $csm_mode == 'live' ? 'none' : 'table-row'; ?>">
-                            <th scope="row"><?php _e('Choose Page', 'csm'); ?>:</th>
-                            <td>  
-                                 
-                            <?php 
-                                    
+                        <th scope="row"><?php _e('Choose Page', 'csm'); ?>:</th>
+                        <td>           
+                            <?php       
                             $dropdown_args = array(
                                 'post_type'        => 'page', 
                                 'selected'         => get_option('csm_show_page'),
                                 'name'             => 'csm_show_page', 
                             );
                             wp_dropdown_pages($dropdown_args); 
-                            
                             ?> 
                             </td>
                         </tr>
@@ -147,58 +128,56 @@ function csm_settings(){
                                 </div>
                             </td>
                         </tr>
-<!-- Theme Compatibility part starting from here  -->
-                            <th scope="row"><?php _e('Theme Compatibility', 'csm'); ?>:</th>
                         <tr>
-                <th scope="row">
-                            <td>
-
-<input <?php if (get_option('dis_header')){
+                            <th scope="row">
+                                <?php _e('Theme Compatibility:', 'csm'); ?>
+                                <td>
+                                <input <?php if (get_option('dis_header')){
                                     echo 'checked="checked"';
                                 } ?> name="dis_header"  type="checkbox" />
-                        <label for=""><?php _e('Disable Header', 'csm'); ?></label>                            
-                    </td>
-        </td>
-        </tr>
-        <th scope="row">
-                            <td>
-<input <?php if (get_option('dis_footer')){
-                                    echo 'checked="checked"';
+                                <label for=""><?php _e('Disable Header', 'csm'); ?></label>
+                            </td>
+                        </td>
+                    </tr>
+                    <th scope="row">
+                        <td>
+                            <input <?php if (get_option('dis_footer')){
+                                echo 'checked="checked"';
                                 } ?> name="dis_footer"  type="checkbox" />
-                        <label for=""><?php _e('Disable Footer', 'csm'); ?></label>                            
-                    </td>
-        </td>
-        </tr>
-        <th scope="row">
-                            <td>
-<input <?php if (get_option('dis_sidebar')){
+                                <label for=""><?php _e('Disable Footer', 'csm'); ?></label>
+                            </td>
+                        </td>
+                    </tr>
+                    <th scope="row">
+                        <td>
+                            <input <?php if (get_option('dis_sidebar')){
                                     echo 'checked="checked"';
                                 } ?> name="dis_sidebar"  type="checkbox" />
-                        <label for=""><?php _e('Disable Sidebar', 'csm'); ?></label>                            
+                        <label for=""><?php _e('Disable Sidebar', 'csm'); ?></label>
                     </td>
-        </td>
-        </tr>
-        <th scope="row">
-                            <td>
-<input <?php if (get_option('loadonly_content')){
-                                    echo 'checked="checked"';
-                                } ?> name="loadonly_content"  type="checkbox" />
-                        <label for=""><?php _e('Load Only Content', 'csm'); ?></label>                            
+                </td>
+            </tr>
+            <th scope="row">
+                <td>
+                    <input <?php if (get_option('loadonly_content')){
+                        echo 'checked="checked"';
+                        } ?> name="loadonly_content"  type="checkbox" />
+                        <label for=""><?php _e('Load Only Content', 'csm'); ?></label>
                     </td>
-        </td>
-        </tr>
-    </tbody>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </table>
-                    </table>
-                    <?php submit_button(); ?>        
-                </form>
-            </div>
-        </div>
-    </div>
+<?php submit_button(); ?>
+</form>
+  </div>
+      </div>
+         </div>
     <script>
-        jQuery(document).ready(function(){
-            jQuery('input[name="csm_mode"]').change(function(){
-                let mode = jQuery(this).val();
+    jQuery(document).ready(function(){
+        jQuery('input[name="csm_mode"]').change(function(){
+            let mode = jQuery(this).val();
                  
                 if(mode == 'live'){
                     jQuery('.csm-choose-page').hide();
@@ -224,12 +203,10 @@ function csm_settings(){
         })
         
     </script>
-
-  
 <?php
 }
- 
 function cms_admin_style() { 
+ 
     echo "
     <style type='text/css'>
     .csm-option-form label {
