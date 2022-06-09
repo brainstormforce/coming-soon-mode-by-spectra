@@ -4,7 +4,7 @@ Plugin Name: BSF - Coming Soon Mode
 Plugin URI: https://brainstormforce.com/
 Description: Most lightweight WP maintanence and coming soon plugin ever.
 Version: 1.0
-Author: Brainstromforce
+Author: Brainstrom Force
 Author URI: https://brainstormforce.com
 License: GPLv2 or later
 Text Domain: csm
