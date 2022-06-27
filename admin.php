@@ -1,14 +1,25 @@
 <?php
 /* add admin menu for plugin */
-function csm_admin_menu()
+function csm_admin_menu1()
 {
-    add_menu_page(__('Coming Soon Mode', 'csm'), __('Coming Soon Mode - Settings', 'csm'), 'activate_plugins', 'csm-settings', 'csm_settings');
+   // add_menu_page(__('Coming Soon Mode', 'csm'), __('Coming Soon Mode - Settings', 'csm'), 'activate_plugins', 'csm-settings', 'csm_settings');
     
 }
 add_action('admin_menu', 'csm_admin_menu');
 add_action('wp_footer',  'showfooter');
 /* end */
-
+/*dd code*/
+add_action("admin_menu", "csm_admin_menu");
+function csm_admin_menu() {
+  add_submenu_page(
+        'options-general.php',
+        '',
+        'Coming Soon Mode by Spectra',
+        'administrator',
+        'csm-settings',
+        'csm_settings' );
+}
+/*dd code*/
 /** register settings */
 add_action( 'admin_init', 'register_csm_settings' );
 
@@ -16,9 +27,10 @@ function showfooter(){
     global $post;
     
     $dis_header = get_option('dis_header');
-    $dis_footer = get_option('dis_footer');
+    $dis_more_option= get_option('dis_more_option');
+	$dis_footer = get_option('dis_footer');
     $dis_sidebar = get_option('dis_sidebar');
-    $loadonly_content = get_option('loadonly_content');
+    $loadonly_content = get_option('csm_appearance');
     $getpage = get_option('csm_show_page');
     $pageid = $post->ID;
 
@@ -53,7 +65,7 @@ function showfooter(){
    
 
     }
-    if ($loadonly_content == "on" && $pageid == $getpage && !is_user_logged_in()) {
+    if ($loadonly_content == "loadonly_content" && $pageid == $getpage && !is_user_logged_in()) {
         echo "<style>
      .site-header,#site-header,.sidebar-main, #header,header,#footer,footer,.sidebar,#sidebar  .site-sidebar,#site-sidebar ,.site-footer,#site-footer{
         display:none !important;
@@ -74,10 +86,11 @@ function register_csm_settings() {
     register_setting( 'csm-settings', 'csm_roles' );
     register_setting( 'csm-settings', 'csm_hide_page' );
     register_setting( 'csm-settings', 'includePages' );
-    register_setting( 'csm-settings', 'dis_header' );
+	register_setting( 'csm-settings', 'dis_more_option' );
+	register_setting( 'csm-settings', 'dis_header' );
     register_setting( 'csm-settings', 'dis_footer' );
     register_setting( 'csm-settings', 'dis_sidebar' );
-    register_setting( 'csm-settings', 'loadonly_content' );
+    register_setting( 'csm-settings', 'csm_appearance' );
     
 
 
@@ -88,30 +101,34 @@ function csm_settings(){
     global $wpdb;
     $pages = $wpdb->get_results("Select ID, post_title from {$wpdb->posts} where post_type = 'page' and post_status = 'publish'");
 ?>
-    <div class="wrap"><h2><?php _e('Coming Soon Mode Settings', 'obwoos'); ?></h2> </div>
+    <div class="wrap"><h2><?php _e('Coming Soon Mode by Spectra', 'obwoos'); ?></h2> </div>
     <div class="wrap">
         <div class="postbox">
-        	<div class="error-msg"><?php settings_errors(); ?></div>
+        	<div class="error-msg"><?php //settings_errors(); ?></div>
             <div class="inside"> 
                 <form method="post" action="options.php" class="csm-option-form">
                     <?php settings_fields( 'csm-settings' ); ?>
                     <?php do_settings_sections( 'csm-settings' ); ?>
                     <table class="form-table">
                         <tr valign="top">
-                            <th scope="row"><?php _e('Choose Mode', 'csm'); ?>:</th>
+                            <th scope="row"><?php _e('Select Mode', 'csm'); ?>:</th>
                             <td>  
                                  
                                 <?php 
                                 $csm_mode = get_option('csm_mode', 'live');
                                                      
                                 ?> 
-                                <label><input type="radio" name="csm_mode" value="live" <?php echo $csm_mode == 'live' ? 'checked':''; ?> /> <?php _e('Live', 'csm')?></label><br />
-                                <label><input type="radio" name="csm_mode" value="maintainance" <?php echo $csm_mode == 'maintainance' ? 'checked':''; ?> /> <?php _e('Maintainance', 'csm')?></label><br />
-                                <label><input type="radio" name="csm_mode" value="comming-soon" <?php echo $csm_mode == 'comming-soon' ? 'checked':''; ?> /> <?php _e('Coming Soon', 'csm')?></label><br />
+                                <label><input type="radio" name="csm_mode" value="live" <?php echo $csm_mode == 'live' ? 'checked':''; ?> /> <?php _e('Live', 'csm')?>
+                                <p  class="description">If Live is selected then a website is visible for all. </p>
+                                </label><br />
+                               <!-- <label><input type="radio" name="csm_mode" value="maintainance" <?php echo $csm_mode == 'maintainance' ? 'checked':''; ?> /> <?php _e('Maintainance', 'csm')?></label><br />-->
+                                <label><input type="radio" name="csm_mode" value="comming-soon" <?php echo $csm_mode == 'comming-soon' ? 'checked':''; ?> /> <?php _e('Coming Soon', 'csm')?>
+                                <p  class="description">If Coming Soon is selected then the site visitors will redirect to the dedicated page.</p>
+                                </label><br />
                             </td>
                         </tr>
                         <tr valign="top" class="csm-choose-page" style="display:<?php echo $csm_mode == 'live' ? 'none' : 'table-row'; ?>">
-                            <th scope="row"><?php _e('Choose Page', 'csm'); ?>:</th>
+                            <th scope="row"><?php _e('Select Page', 'csm'); ?>:</th>
                             <td>  
                                  
                             <?php 
@@ -124,17 +141,18 @@ function csm_settings(){
                             wp_dropdown_pages($dropdown_args); 
                             
                             ?> 
+                            <p class="description">The site visitors will be redirected to the selected page if Coming Soon mode is active.</p>
                             </td>
                         </tr>
                         <tr valign="top" class="csm-who-can-access" style="display:<?php echo $csm_mode == 'live' ? 'none' : 'table-row'; ?>">
-                            <th scope="row"><?php _e('Who Can Access Live Site', 'csm'); ?>:</th>
+                            <th scope="row"><?php _e('Live Site Access', 'csm'); ?>:</th>
                             <td>   
                             <?php 
                                 $csm_who_can_access = get_option('csm_who_can_access', 'logged');
                                                      
                                 ?> 
-                                <label><input type="radio" name="csm_who_can_access" value="logged" <?php echo $csm_who_can_access == 'logged' ? 'checked':''; ?> /> <?php _e('All logged-in users', 'csm')?></label><br />
-                                <label><input type="radio" name="csm_who_can_access" value="custom" <?php echo $csm_who_can_access == 'custom' ? 'checked':''; ?> /> <?php _e('Custom', 'csm')?></label><br /> 
+                                <label><input type="radio" name="csm_who_can_access" value="logged" <?php echo $csm_who_can_access == 'logged' ? 'checked':''; ?> /> <?php _e('All logged-in users', 'csm')?></label><br /><p></p>
+                                <label><input type="radio" name="csm_who_can_access" value="custom" <?php echo $csm_who_can_access == 'custom' ? 'checked':''; ?> /> <?php _e('Custom', 'csm')?></label><br /> 									
                                 <div style="margin-left: 30px;margin-top: 10px;display:<?php echo $csm_who_can_access == 'logged' ? 'none' : 'block' ?>" class="csm-custom-roles">
                                 <?php
                                 global $wp_roles;
@@ -145,35 +163,52 @@ function csm_settings(){
                                 }
                                 ?>
                                 </div>
+                                <p  class="description">Select the users who can access the live site even Coming Soon mode is activated.</p>
                             </td>
                         </tr>
 
                       
 <tr class="theme-compatibility" style="display:<?php echo $csm_mode == 'live' ? 'none' : 'table-row'; ?>">
-<th scope="row">Theme compatibility</th>
+<th scope="row">Page Appearance</th>
 <td>
+<?php 
+$loadonly_content=get_option('csm_appearance');
+?>
+<label><input type="radio" class="dis_more_option" name="csm_appearance" value="loadonly_content" <?php echo $loadonly_content == 'loadonly_content' ? 'checked':''; ?> /> <?php _e('Display Page Content Only', 'csm')?></label><br /><p></p>
+<label><input type="radio" class="dis_more_option" name="csm_appearance" value="dis_more_option" <?php echo $loadonly_content == 'dis_more_option' ? 'checked':''; ?> /> <?php _e('More Custom Options', 'csm')?></label>									
+<div class="chk_con" style="margin-left: 30px;margin-top: 10px;">
+<!--<label for="">
+<input <?php if (get_option('loadonly_content')){
+echo 'checked="checked"';
+} ?> name="loadonly_content"  type="checkbox" />
+<?php _e('Display Page Content Only', 'csm'); ?></label>
+<br />
+<p></p>
 <label for="">
+<input class="dis_more_option" <?php if (get_option('dis_more_option')){
+echo 'checked="checked"';
+} ?> name="dis_more_option" value="chk_con"  type="checkbox" />
+<?php _e('More Custom Options', 'csm'); ?></label>-->                            
+
+
+<label class="chk_con" for="">
 <input <?php if (get_option('dis_header')){
 echo 'checked="checked"';
 } ?> name="dis_header"  type="checkbox" />
 <?php _e('Disable Header', 'csm'); ?></label>                            
 <br />                      
-<label for=""><input <?php if (get_option('dis_footer')){
+<label class="chk_con" for=""><input <?php if (get_option('dis_footer')){
 echo 'checked="checked"';
 } ?> name="dis_footer"  type="checkbox" />
 <?php _e('Disable Footer', 'csm'); ?></label>                            
 <br />
-<label for="">
+<label class="chk_con" for="">
 <input <?php if (get_option('dis_sidebar')){
 echo 'checked="checked"';
 } ?> name="dis_sidebar"  type="checkbox" />
-<?php _e('Disable Sidebar', 'csm'); ?></label>                            
-<br />
-<label for="">
-<input <?php if (get_option('loadonly_content')){
-echo 'checked="checked"';
-} ?> name="loadonly_content"  type="checkbox" />
-<?php _e('Load Only Content', 'csm'); ?></label>                            
+<?php _e('Disable Sidebar', 'csm'); ?></label>
+</div>	
+<p  class="description">Make the selected page more interactive by controlling the website components.</p>
 </td>
 </tr>
 </tbody>
@@ -187,9 +222,31 @@ echo 'checked="checked"';
             </div>
         </div>
     </div>
-    <script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	<script>
+	
         jQuery(document).ready(function(){
-            jQuery('input[name="csm_mode"]').change(function(){
+			if(jQuery('input[name="csm_appearance"]').prop('checked') == true){
+    		var inputValue1 = jQuery('input[name="csm_appearance"]').attr("value");
+			if(inputValue1 == 'dis_more_option'){
+			jQuery(".chk_con").show();
+				
+			}else{
+			jQuery('.chk_con').hide();
+			}
+			}
+			jQuery('input[name="csm_appearance"]').click(function(){
+					var inputValue = jQuery(this).attr("value");
+					if(inputValue == 'dis_more_option'){
+					jQuery(".chk_con").show();
+					}else{
+					jQuery(".chk_con").hide();
+					}
+			});
+		
+
+			jQuery('input[name="csm_mode"]').change(function(){
                 let mode = jQuery(this).val();
                  
                 if(mode == 'live'){
@@ -216,7 +273,11 @@ echo 'checked="checked"';
                 }
             })
         })
-        
+        // In your Javascript (external .js resource or <script> tag)
+jQuery(document).ready(function() {
+    jQuery('#csm_show_page').select2();
+	jQuery('.select2').css('width','200px');
+});
     </script>
 
   
@@ -224,19 +285,23 @@ echo 'checked="checked"';
 }
  
 	
-function cms_admin_style() { 
+//function cms_admin_style() { 
  
     echo "
     <style type='text/css'>
     .postbox{
 	border: none !important;
 	background: none !important;
+	box-shadow: none !important;
 	}
 	.csm-option-form label {
         display: inline-block;
         margin: 0 0 8px 0;
     }
+	.select2{
+width: 200px !important;
+max-width:100%;
+}
     </style>
     ";
-}
-add_action( 'admin_head', 'cms_admin_style' );
+//}

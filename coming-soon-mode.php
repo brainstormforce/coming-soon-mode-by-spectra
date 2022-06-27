@@ -1,10 +1,10 @@
 <?php
 /**
-Plugin Name: BSF - Coming Soon Mode
+Plugin Name: Coming Soon Mode by Spectra
 Plugin URI: https://brainstormforce.com/
-Description: Most lightweight WP maintanence and coming soon plugin ever.
+Description: Most lightweight Coming soon mode plugin ever by Spectra.
 Version: 1.0
-Author: Brainstrom Force
+Author: Brainstorm Force
 Author URI: https://brainstormforce.com
 License: GPLv2 or later
 Text Domain: csm
