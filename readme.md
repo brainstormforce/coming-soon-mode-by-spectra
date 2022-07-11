@@ -6,11 +6,11 @@
 **Tested up to:** 1.0  
 **Requires PHP:** 5.6   
 
-Coming Soon Mode By Spectra is a Light-weight dedicated plugin for activating Coming Soon or Maintananec mode on your website.
+Coming Soon Mode By Spectra is a Lightweight dedicated plugin for activating Coming Soon or Maintenance mode on your website.
 
 ## Description ##
 
-Coming Soon Mode By Spectra is standalone dedicated plugin for applying Coming soon mode and maintaence mode on your website without installing and other plugin and without interfaring with code.So Make your website inaccessible to the public with our simple and easy to use Coming soon mode. It is very lightweight (less than 5KB on frontend side) speed. Plugin UI is extremly clean and looks professional. 
+Coming Soon Mode By Spectra is a standalone dedicated plugin for applying Coming soon mode and maintenance mode on your website without installing any other plugin or interfering with code. So Make your website inaccessible to the public with our simple and easy-to-use Coming soon mode. It is a very lightweight (less than 5KB on the frontend side) speed. Plugin UI is extremely clean and looks professional.
 
 ## Installation ##
 
@@ -23,11 +23,10 @@ Coming Soon Mode By Spectra is standalone dedicated plugin for applying Coming s
 
 ## Features ##
 
-	- Compitatible with any WordPress theme
-	- Live mode accessible only selected user or logged-in user as per setting selection.
+	- Compatible with any WordPress theme
+	- Live mode is accessible only to the selected user or logged-in user as per setting selection.
 	- Multiselect Page even coming soon mode is active.
-	- Control Header,Footer & Sidebar Apperience of your selected page. 
-
+	- Control Header, Footer & Sidebar Apperience of your selected page. 
 
 ## Privacy Statement
 
@@ -37,7 +36,7 @@ This plugin does not collect or store any personal information about you and you
 
 ### I have activated the plugin, but it seems the plugin is not working.
 
-After activating plugin make sure to its activated or not by checking its setting page of plugin. If still its not working just go to your Browser setting and clear the chache memory of perticular page or browser then it will work. & still if it's not working then contact us to our support team we are happy to help you.
+After activating the plugin, make sure the plugin is activated or not by checking the setting page of the plugin. If still, it is not working, just go to your browser setting and clear the cache memory of a particular page or browser then it will work. & still, if it's not working, then contact our support team. We are happy to help you.
 
 ### Is this plugin free?
 
