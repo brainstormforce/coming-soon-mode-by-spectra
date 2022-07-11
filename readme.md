@@ -1,37 +1,37 @@
-# Coming Soon Mode, Maintenance Mode, Under construction Mode Plugin by BrainstromForce
+# Coming Soon Mode By Spectra #
+**Contributors:** [brainstormforce](https://profiles.wordpress.org/brainstormforce/)  
+**License:** GPLv2 or later  
+**License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
+**Tags:** wp maintenance mode & coming soon plugin, maintenance mode plugin, wp maintenance mode plugin, wp maintenance mode & coming soon plugin, wordpress maintenance mode plugin, coming soon & maintenance mode. 
+**Tested up to:** 1.0  
+**Requires PHP:** 5.6   
 
-Plugin Name: BSF - Coming Soon Mode
-Plugin URI: https://brainstormforce.com/
-Description: Most lightweight WP maintanence and coming soon plugin ever.
-Version: 1.0
-Author: Brainstromforce
-Author URI: https://brainstormforce.com
-License: GPLv2 or later
-Text Domain: csm.
+Coming Soon Mode By Spectra is a Light-weight dedicated plugin for activating Coming Soon or Maintananec mode on your website.
 
-Description :- Want to add your website in under construction/maintainence mode/coming soon mode while building your website.Then you can use this most lightwright wordpress maintainence mode plugin. & activate your desire mode in just one click. Then your website is only accessible as per your selection either all logged-in user or your selected wordpress user roles. So normal visiter redirect only yout selected page which you chooes. 
+## Description ##
 
-## Video Demo:
+Coming Soon Mode By Spectra is standalone dedicated plugin for applying Coming soon mode and maintaence mode on your website without installing and other plugin and without interfaring with code.So Make your website inaccessible to the public with our simple and easy to use Coming soon mode. It is very lightweight (less than 5KB on frontend side) speed. Plugin UI is extremly clean and looks professional. 
 
+## Installation ##
 
-## Features
+### From within WordPress ###
+1. Visit "Plugins > Add New > Upload Plugin"
+2. Search for "Coming Soon Mode By Spectra"
+3. Install and activate
 
-Plugin featured overview:
+## License ##
 
-* Comppitatible with any WordPress theme
-* Live mode accessible only selected user or logged-in user as per setting selection.
-* All non Loggedin user redirect to perticular selected Page
-* Responsive layout and design for mobile devices
-* Select normal user page as per your choise
-* Set your own font abd background colors
-* Option to show/hide count down widget
-* Receive lifetime updates
-* Lightweight Plugin
-* Option to delete or keep the plugin settings after removing the plugin
+## Features ##
+
+	- Compitatible with any WordPress theme
+	- Live mode accessible only selected user or logged-in user as per setting selection.
+	- Multiselect Page even coming soon mode is active.
+	- Control Header,Footer & Sidebar Apperience of your selected page. 
+
 
 ## Privacy Statement
 
-This plugin does not collect or store any personal information about you and your client. When you activate, disactivate and remove the plugin a ping is sent to our server for usage statistics.
+This plugin does not collect or store any personal information about you and your client.
 
 ## Frequently Asked Questions
 
@@ -43,18 +43,5 @@ After activating plugin make sure to its activated or not by checking its settin
 
 Yes absolutely. This plugin is free.
 
-### How do I install the plugin?
-
-1. Install BSF - Coming Soon plugin by uploading the BSF-coming-soon directory to the /wp-content/plugins/ directory.
-2. Activate the plugin.
-
-## Changelog
-
-
-## Upgrade Notice
-
-### v1.0.0
-Plugin is ready to use.
-
 ## Screenshots
-![coming-soon-mode-1](https://user-images.githubusercontent.com/91533131/166686832-6e5b6230-25cf-4e4a-8a0e-ec63e1175c00.png)
+![coming-soon-mode-1](https://user-images.githubusercontent.com/91533131/178202693-adf1fbdf-a66a-42af-9478-a980fc68b905.png)
