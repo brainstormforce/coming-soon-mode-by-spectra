@@ -1,0 +1,13 @@
+.postbox{
+	border: none !important;
+	background: none !important;
+	box-shadow: none !important;
+	}
+	.csm-option-form label {
+        display: inline-block;
+        margin: 0 0 8px 0;
+    }
+	.select2{
+width: 200px !important;
+max-width:100%;
+}
