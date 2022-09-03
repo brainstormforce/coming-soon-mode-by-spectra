@@ -7,7 +7,7 @@
  *
  * @category Components
  * @package  Components
- * @author   brainstormforce <username@brainstormforce.com>
+ * @author   Brainstorm Force <username@brainstormforce.com>
  * @license  GPLv2 or later
  * @link     https://brainstormforce.com/
  */
@@ -30,16 +30,16 @@ Text Domain: csm
   * @return void
   */
 define('CSM_PLUGIN_DIR', plugin_dir_path(__FILE__)); 
-require_once(CSM_PLUGIN_DIR . '/admin.php');
+require_once CSM_PLUGIN_DIR . '/admin.php';
    
-add_action('template_redirect', 'csm_redirect');
+add_action('template_redirect', 'Csm_redirect');
 
 /**
  * Check if in admin panel or current page = page need redirect => do nothing
  *
  * @return void
  **/
-function csm_redirect()
+function Csm_redirect()
 {
     global $post;
     $redirect_page_id = get_option('csm_show_page');  /* get option */
@@ -95,7 +95,8 @@ add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'dd_add_plugin_page
 /**
  * Define constants
  *
- * @since  1.0.0
+ * @param object $links links object.
+ * 
  * @return void
  */
 function dd_Add_Plugin_Page_Settings_link($links)
@@ -105,7 +106,14 @@ function dd_Add_Plugin_Page_Settings_link($links)
        '">' . __('Settings') . '</a>';
        return $links;
 }
-function dd_scripts() {
-     wp_enqueue_style( 'public', plugin_dir_url( __FILE__ )  . 'css/public.css' ); 
+
+/**
+ * Define constants
+ *
+ * @return void
+ */
+function Css_add()
+{
+     wp_enqueue_style('public', plugin_dir_url(__FILE__)  . 'css/public.css'); 
 }
-add_action( 'wp_enqueue_scripts', 'dd_scripts' );
+add_action('wp_enqueue_scripts', 'css_add');

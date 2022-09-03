@@ -44,16 +44,16 @@ add_action('admin_init', 'register_csm_settings');
     /**
      * Define constants showfooter
      *
-     * @since  1.0.0
+     * @param object $classes classes object.
+     * 
      * @return void
      */
 function showfooter($classes)
 {
     global $post;
-	
     $dis_header = get_option('dis_header');
     $dis_more_option= get_option('dis_more_option');
-	$dis_footer = get_option('dis_footer');
+    $dis_footer = get_option('dis_footer');
     $dis_sidebar = get_option('dis_sidebar');
     $loadonly_content = get_option('csm_appearance');
     $getpage = get_option('csm_show_page');
@@ -61,21 +61,20 @@ function showfooter($classes)
     $selected=(array) get_option('csm_show_page');
     $selected1=(array)get_option('csm_page');
     $csm_page = array_merge($selected, $selected1);
-	if ($dis_header == "on" && !is_user_logged_in() && in_array($pageid, $csm_page)) {
-			$classes[] = 'header-hide';	
+    if ($dis_header == "on" && !is_user_logged_in() && in_array($pageid, $csm_page)) {
+        $classes[] = 'header-hide';
     }
     if ($dis_footer == "on"  && !is_user_logged_in() && in_array($pageid, $csm_page)) {
-			$classes[] = 'footer-hide';	 
+        $classes[] = 'footer-hide';
     }
     if ($dis_sidebar == "on"  && !is_user_logged_in() && in_array($pageid, $csm_page)) {
-			$classes[] = 'siderbar-hide';
+        $classes[] = 'siderbar-hide';
     }
     if ($loadonly_content == "loadonly_content"  && !is_user_logged_in() && in_array($pageid, $csm_page)) {
-			$classes[] = 'content-only';
+        $classes[] = 'content-only';
     }
-	
-	 	return $classes;
-	
+    
+    return $classes;
 }
 
 /**
@@ -123,7 +122,7 @@ function csm_settings()
                             <th scope="row"><?php _e('Select Mode', 'csm'); ?></th>
                             <td>       
                                 <?php 
-                                $csm_mode = get_option('csm_mode', 'live');                   
+                                $csm_mode = get_option('csm_mode', 'live');
                                 ?> 
                                 <label><input type="radio" name="csm_mode" value="live" <?php echo $csm_mode == 'live' ? 'checked':''; ?> /> <?php _e('Live', 'csm')?>
                                 <p  class="description">If Live is selected then a website is visible for all. </p>
@@ -212,7 +211,7 @@ function csm_settings()
                             <!--<label for="">
                                 <input <?php if (get_option('loadonly_content')) {
                                     echo 'checked="checked"';
-                                    } 
+                               } 
                                         ?> name="loadonly_content"  type="checkbox" />
                                         <?php _e('Display Page Content Only', 'csm'); ?></label>
                         <br />
@@ -220,8 +219,7 @@ function csm_settings()
                         <label for="">
                         <input class="dis_more_option" <?php if (get_option('dis_more_option')) {
                             echo 'checked="checked"';
-                                                       } ?> 
-                                                       name="dis_more_option" value="chk_con"  type="checkbox" />
+                                                       } ?> name="dis_more_option" value="chk_con"  type="checkbox" />
                             <?php _e('More Custom Options', 'csm'); ?></label>-->                            
                         
                         
@@ -242,8 +240,7 @@ function csm_settings()
                             <input <?php if (get_option('dis_sidebar')) {
                                     echo 'checked="checked"';
                                     } ?> name="dis_sidebar"  type="checkbox" />
-                                    <?php _e('Disable Sidebar', 'csm'); ?></label>
-                                </div>	
+                                    <?php _e('Disable Sidebar', 'csm'); ?></label></div>	
                                 <p  class="description">Make the selected page more interactive by controlling the website components.</p>
                             </td>
                         </tr>
@@ -257,7 +254,7 @@ function csm_settings()
     </div>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="<?php echo plugin_dir_url( __FILE__ ) . 'js/custom.js'?>"></script>
-<link href="<?php echo plugin_dir_url( __FILE__ ) . 'css/admin.css'?>" rel="stylesheet" />  
-<?php
+<script src="<?php echo plugin_dir_url(__FILE__) . 'js/custom.js'?>"></script>
+<link href="<?php echo plugin_dir_url(__FILE__) . 'css/admin.css'?>" rel="stylesheet" />  
+    <?php
 }
