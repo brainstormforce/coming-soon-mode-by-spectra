@@ -7,15 +7,15 @@
  *
  * @category Components
  * @package  Components
- * @author   Brainstrom Force <username@brainstormforce.com>
+ * @author   brainstormforce <username@brainstormforce.com>
  * @license  GPLv2 or later
  * @link     https://brainstormforce.com/
  */
 
 /**
-Plugin Name: Coming Soon Mode by Spectra
+Plugin Name: Coming Soon Mode By Spectra
 Plugin URI: https://brainstormforce.com/
-Description: Most lightweight Coming soon mode plugin ever by Spectra.
+Description: Most lightweight Coming soon mode.
 Version: 1.0
 Author: Brainstorm Force
 Author URI: https://brainstormforce.com
@@ -105,3 +105,7 @@ function dd_Add_Plugin_Page_Settings_link($links)
        '">' . __('Settings') . '</a>';
        return $links;
 }
+function dd_scripts() {
+     wp_enqueue_style( 'public', plugin_dir_url( __FILE__ )  . 'css/public.css' ); 
+}
+add_action( 'wp_enqueue_scripts', 'dd_scripts' );
