@@ -13,13 +13,8 @@
 
   
 /* add admin menu for plugin */
-function csm_admin_menu1()
-{
-   // add_menu_page(__('Coming Soon Mode', 'csm'), __('Coming Soon Mode - Settings', 'csm'), 'activate_plugins', 'csm-settings', 'csm_settings');
-    
-}
 add_action('admin_menu', 'csm_admin_menu');
-add_action('wp_footer',  'showfooter');
+add_filter('body_class',  'showfooter');
 /* end */
 /*dd code*/
 add_action("admin_menu", "csm_admin_menu");
@@ -49,50 +44,37 @@ add_action('admin_init', 'register_csm_settings');
     /**
      * Define constants showfooter
      *
-     * @since  1.0.0
+     * @param object $classes classes object.
+     * 
      * @return void
      */
-function showfooter()
+function showfooter($classes)
 {
     global $post;
     $dis_header = get_option('dis_header');
-    $dis_more_option= get_option('dis_more_option');$dis_footer = get_option('dis_footer');
+    $dis_more_option= get_option('dis_more_option');
+    $dis_footer = get_option('dis_footer');
     $dis_sidebar = get_option('dis_sidebar');
     $loadonly_content = get_option('csm_appearance');
     $getpage = get_option('csm_show_page');
     $pageid = $post->ID;
-    
     $selected=(array) get_option('csm_show_page');
     $selected1=(array)get_option('csm_page');
     $csm_page = array_merge($selected, $selected1);
-
-
     if ($dis_header == "on" && !is_user_logged_in() && in_array($pageid, $csm_page)) {
-        ?>
-        <link href="<?php echo plugin_dir_url( __FILE__ ) . 'css/admin1.css'?>" rel="stylesheet" />
-        <?php 
+        $classes[] = 'header-hide';
     }
-
     if ($dis_footer == "on"  && !is_user_logged_in() && in_array($pageid, $csm_page)) {
-        ?>
-        <link href="<?php echo plugin_dir_url( __FILE__ ) . 'css/admin2.css'?>" rel="stylesheet" />
-        <?php
-
+        $classes[] = 'footer-hide';
     }
-
     if ($dis_sidebar == "on"  && !is_user_logged_in() && in_array($pageid, $csm_page)) {
-
-       ?>
-        <link href="<?php echo plugin_dir_url( __FILE__ ) . 'css/admin3.css'?>" rel="stylesheet" />
-        <?php
-
+        $classes[] = 'siderbar-hide';
     }
     if ($loadonly_content == "loadonly_content"  && !is_user_logged_in() && in_array($pageid, $csm_page)) {
-        ?>
-        <link href="<?php echo plugin_dir_url( __FILE__ ) . 'css/admin4.css'?>" rel="stylesheet" />
-        <?php
-
+        $classes[] = 'content-only';
     }
+    
+    return $classes;
 }
 
 /**
@@ -140,7 +122,7 @@ function csm_settings()
                             <th scope="row"><?php _e('Select Mode', 'csm'); ?></th>
                             <td>       
                                 <?php 
-                                $csm_mode = get_option('csm_mode', 'live');                   
+                                $csm_mode = get_option('csm_mode', 'live');
                                 ?> 
                                 <label><input type="radio" name="csm_mode" value="live" <?php echo $csm_mode == 'live' ? 'checked':''; ?> /> <?php _e('Live', 'csm')?>
                                 <p  class="description">If Live is selected then a website is visible for all. </p>
@@ -212,158 +194,67 @@ function csm_settings()
                                 </div>
                                 <p  class="description">Select the users who can access the live site even Coming Soon mode is activated.</p>
                             </td>
+                        </tr>              
+                        <tr class="theme-compatibility" style="display:<?php echo $csm_mode == 'live' ? 'none' : 'table-row'; ?>">
+                        <th scope="row">Page Appearance</th><td>
+                        
+                            <?php 
+                            $loadonly_content = get_option('csm_appearance');
+                            ?>
+                            
+                            <label><input type="radio" class="dis_more_option" name="csm_appearance" value="loadonly_content" <?php echo $loadonly_content == 'loadonly_content' ? 'checked':''; ?> /> 
+                            <?php _e('Display Page Content Only', 'csm')?></label><br 
+                            ><p></p>
+                            <label><input type="radio" class="dis_more_option" name="csm_appearance" value="dis_more_option" 
+                            <?php echo $loadonly_content == 'dis_more_option' ? 'checked':''; ?> /> <?php _e('More Custom Options', 'csm')?></label>									
+                            <div class="chk_con" style="margin-left: 30px;margin-top: 10px;">
+                            <!--<label for="">
+                                <input <?php if (get_option('loadonly_content')) {
+                                    echo 'checked="checked"';
+                               } 
+                                        ?> name="loadonly_content"  type="checkbox" />
+                                        <?php _e('Display Page Content Only', 'csm'); ?></label>
+                        <br />
+                        <p></p>
+                        <label for="">
+                        <input class="dis_more_option" <?php if (get_option('dis_more_option')) {
+                            echo 'checked="checked"';
+                                                       } ?> name="dis_more_option" value="chk_con"  type="checkbox" />
+                            <?php _e('More Custom Options', 'csm'); ?></label>-->                            
+                        
+                        
+                        <label class="chk_con" for="">
+                            <input <?php if (get_option('dis_header')) {
+                                echo 'checked="checked"';
+                                } ?> name="dis_header"  type="checkbox" />
+                            <?php _e('Disable Header', 'csm'); ?></label>                            
+                        <br />   
+                        
+                        <label class="chk_con" for=""><input <?php if (get_option('dis_footer')) {
+                            echo 'checked="checked"';
+                                                             } ?> 
+                                                             name="dis_footer"  type="checkbox" />
+                            <?php _e('Disable Footer', 'csm'); ?></label>                            
+                            <br />
+                            <label class="chk_con" for="">
+                            <input <?php if (get_option('dis_sidebar')) {
+                                    echo 'checked="checked"';
+                                    } ?> name="dis_sidebar"  type="checkbox" />
+                                    <?php _e('Disable Sidebar', 'csm'); ?></label></div>	
+                                <p  class="description">Make the selected page more interactive by controlling the website components.</p>
+                            </td>
                         </tr>
-
-                      
-<tr class="theme-compatibility" style="display:<?php echo $csm_mode == 'live' ? 'none' : 'table-row'; ?>">
-<th scope="row">Page Appearance</th><td>
-
-    <?php 
-    $loadonly_content = get_option('csm_appearance');
-    ?>
-    
-    <label><input type="radio" class="dis_more_option" name="csm_appearance" value="loadonly_content" <?php echo $loadonly_content == 'loadonly_content' ? 'checked':''; ?> /> 
-    <?php _e('Display Page Content Only', 'csm')?></label><br 
-    ><p></p>
-    <label><input type="radio" class="dis_more_option" name="csm_appearance" value="dis_more_option" 
-    <?php echo $loadonly_content == 'dis_more_option' ? 'checked':''; ?> /> <?php _e('More Custom Options', 'csm')?></label>									
-    <div class="chk_con" style="margin-left: 30px;margin-top: 10px;">
-    <!--<label for="">
-        <input <?php if (get_option('loadonly_content')) {
-            echo 'checked="checked"';
-            } 
-                ?> name="loadonly_content"  type="checkbox" />
-                <?php _e('Display Page Content Only', 'csm'); ?></label>
-<br />
-<p></p>
-<label for="">
-<input class="dis_more_option" <?php if (get_option('dis_more_option')) {
-    echo 'checked="checked"';
-                               } ?> 
-                               name="dis_more_option" value="chk_con"  type="checkbox" />
-    <?php _e('More Custom Options', 'csm'); ?></label>-->                            
-
-
-<label class="chk_con" for="">
-    <input <?php if (get_option('dis_header')) {
-        echo 'checked="checked"';
-        } ?> name="dis_header"  type="checkbox" />
-    <?php _e('Disable Header', 'csm'); ?></label>                            
-<br />   
-
-<label class="chk_con" for=""><input <?php if (get_option('dis_footer')) {
-    echo 'checked="checked"';
-                                     } ?> 
-                                     name="dis_footer"  type="checkbox" />
-    <?php _e('Disable Footer', 'csm'); ?></label>                            
-    <br />
-    <label class="chk_con" for="">
-    <input <?php if (get_option('dis_sidebar')) {
-            echo 'checked="checked"';
-            } ?> name="dis_sidebar"  type="checkbox" />
-            <?php _e('Disable Sidebar', 'csm'); ?></label>
-        </div>	
-        <p  class="description">Make the selected page more interactive by controlling the website components.</p>
-    </td>
-</tr>
 </tbody>
 </table>
-
-                    </table>
-                    
+</table>
                     <?php submit_button(); ?>
-                
                 </form>
             </div>
         </div>
     </div>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="<?php echo plugin_dir_url( __FILE__ ) . 'js/custom.js'?>"></script>
-<link href="<?php echo plugin_dir_url( __FILE__ ) . 'css/admin.css'?>" rel="stylesheet" />
-<!--<script>
-
-        jQuery(document).ready(function(){
-            if(jQuery('input[name="csm_appearance"]').prop('checked') == true){
-                var inputValue1 = jQuery('input[name="csm_appearance"]').attr("value");
-                if(inputValue1 == 'dis_more_option'){
-                    jQuery(".chk_con").show();
-                
-                }else{
-                    jQuery('.chk_con').hide();
-                }
-            }
-            jQuery('input[name="csm_appearance"]').click(function(){
-                var inputValue = jQuery(this).attr("value");
-                if(inputValue == 'dis_more_option'){
-                    jQuery(".chk_con").show();
-                }else{
-                    jQuery(".chk_con").hide();
-                }
-            });
-            jQuery('input[name="csm_mode"]').change(function(){
-                let mode = jQuery(this).val();
-                 
-                if(mode == 'live'){
-                    jQuery('.csm-choose-page').hide();
-                    jQuery('.csm-who-can-access').hide();
-                    jQuery('.theme-compatibility').hide();
-                }
-                else{
-                    jQuery('.csm-choose-page').css('display','table-row');
-                    jQuery('.csm-who-can-access').css('display','table-row');
-                    jQuery('.theme-compatibility').css('display','table-row');
-                }
-            })
-        })
-        jQuery(document).ready(function(){
-            jQuery('input[name="csm_who_can_access"]').change(function(){
-                let csm_who_can_access = jQuery(this).val();
-                 
-                if(csm_who_can_access == 'logged'){
-                    jQuery('.csm-custom-roles').hide();
-                }
-                else{
-                    jQuery('.csm-custom-roles').show();
-                }
-            })
-        })
-        // In your Javascript (external .js resource or <script> tag)
-jQuery(document).ready(function() {
-    jQuery('#csm_show_page').select2();
-    jQuery('#csm_page').select2();
-    jQuery('.select2').css('width','200px');
-});
-
-    </script>-->
-
-  
-<?php
+<script src="<?php echo plugin_dir_url(__FILE__) . 'js/custom.js'?>"></script>
+<link href="<?php echo plugin_dir_url(__FILE__) . 'css/admin.css'?>" rel="stylesheet" />  
+    <?php
 }
- 
-/**
- * This is cms admin style css
- *
- * @return void
- */	
-/*function cms_admin_style() { 
- 
-    echo "
-    <style type='text/css'>
-    .postbox{
-	border: none !important;
-	background: none !important;
-	box-shadow: none !important;
-	}
-	.csm-option-form label {
-        display: inline-block;
-        margin: 0 0 8px 0;
-    }
-	.select2{
-width: 200px !important;
-max-width:100%;
-}
-    </style>
-    ";
-}
-add_action('admin_head', 'cms_admin_style');*/

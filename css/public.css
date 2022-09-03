@@ -1,0 +1,20 @@
+.header-hide header{
+        display:none;
+        }
+        .footer-hide footer{
+        display:none;
+        }
+        .siderbar-hide sidebar{
+        display:none;
+        }
+        .content-only header{
+        display:none;
+        }
+        
+        .content-only footer{
+        display:none;
+        }
+        
+        .content-only sidebar{
+        display:none;
+        }
