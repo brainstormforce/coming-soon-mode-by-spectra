@@ -1,0 +1,297 @@
+/**
+ * Coming Soon Mode by Spectra - Main App Component
+ */
+import { useState, useEffect } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import { 
+    Card, 
+    CardHeader, 
+    CardBody, 
+    CardFooter,
+    Button,
+    Panel,
+    PanelBody,
+    PanelRow,
+    ToggleControl,
+    RadioControl,
+    CheckboxControl,
+    SelectControl,
+    Spinner,
+    Notice
+} from '@wordpress/components';
+import { Icon, check } from '@wordpress/icons';
+import apiFetch from '@wordpress/api-fetch';
+import './styles/app.css';
+
+// Components
+import Header from './components/Header';
+import Footer from './components/Footer';
+import PageSelector from './components/PageSelector';
+import UserRoleSelector from './components/UserRoleSelector';
+
+const App = () => {
+    // Initial state with default values to avoid loading screen
+    const [settings, setSettings] = useState({
+        csm_mode: 'live',
+        csm_show_page: '',
+        csm_page: [],
+        csm_who_can_access: 'logged',
+        csm_roles: [],
+        csm_appearance: 'loadonly_content',
+        dis_header: false,
+        dis_footer: false,
+        dis_sidebar: false
+    });
+
+    // UI state
+    const [loading, setLoading] = useState(false); // Changed to false for instant UI display
+    const [saving, setSaving] = useState(false);
+    const [saveSuccess, setSaveSuccess] = useState(false);
+    const [error, setError] = useState(null);
+    const [pages, setPages] = useState([]);
+    const [userRoles, setUserRoles] = useState([]);
+
+    // Fetch settings and data on component mount
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Fetch all data in parallel for faster loading
+                const [settingsResponse, pagesResponse, rolesResponse] = await Promise.all([
+                    apiFetch({ path: '/csm/v1/settings' }),
+                    apiFetch({ path: '/wp/v2/pages?per_page=100' }),
+                    apiFetch({ path: '/csm/v1/roles' })
+                ]);
+                
+                // Process the responses
+                setSettings(settingsResponse);
+                
+                const formattedPages = pagesResponse.map(page => ({
+                    value: page.id.toString(),
+                    label: page.title.rendered
+                }));
+                setPages(formattedPages);
+                
+                setUserRoles(rolesResponse);
+                
+                // Hide loading state
+                setLoading(false);
+            } catch (err) {
+                setError(__('Failed to load settings. Please refresh the page.', 'csm'));
+                setLoading(false);
+            }
+        };
+        
+        // Start fetching immediately
+        fetchData();
+    }, []);
+
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setSaving(true);
+        setError(null);
+        setSaveSuccess(false);
+        
+        try {
+            await apiFetch({
+                path: '/csm/v1/settings',
+                method: 'POST',
+                data: settings
+            });
+            
+            setSaveSuccess(true);
+            setTimeout(() => setSaveSuccess(false), 3000);
+        } catch (err) {
+            setError(__('Failed to save settings. Please try again.', 'csm'));
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    // Handle input changes
+    const handleChange = (name, value) => {
+        setSettings(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    if (loading) {
+        return (
+            <div className="csm-loading">
+                <Spinner />
+                <p>{__('Loading settings...', 'csm')}</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="csm-dashboard">
+            <Header />
+            
+            {error && (
+                <Notice status="error" isDismissible={false}>
+                    {error}
+                </Notice>
+            )}
+            
+            {saveSuccess && (
+                <Notice status="success" isDismissible={false}>
+                    <div className="csm-success-message">
+                        <Icon icon={check} />
+                        {__('Settings saved successfully!', 'csm')}
+                    </div>
+                </Notice>
+            )}
+            
+            <form onSubmit={handleSubmit}>
+                <Card className="csm-card">
+                    <CardHeader>
+                        <h2>{__('Coming Soon Mode Settings', 'csm')}</h2>
+                    </CardHeader>
+                    
+                    <CardBody>
+                        <Panel>
+                            <PanelBody title={__('Mode Selection', 'csm')} initialOpen={true}>
+                                <PanelRow>
+                                    <RadioControl
+                                        label={__('Select Mode', 'csm')}
+                                        help={__('Choose between Live mode and Coming Soon mode', 'csm')}
+                                        selected={settings.csm_mode}
+                                        options={[
+                                            { label: __('Live', 'csm'), value: 'live' },
+                                            { label: __('Coming Soon', 'csm'), value: 'comming-soon' }
+                                        ]}
+                                        onChange={(value) => handleChange('csm_mode', value)}
+                                    />
+                                </PanelRow>
+                                
+                                {settings.csm_mode === 'live' && (
+                                    <p className="csm-help-text">
+                                        {__('If Live is selected then a website is visible for all.', 'csm')}
+                                    </p>
+                                )}
+                                
+                                {settings.csm_mode === 'comming-soon' && (
+                                    <p className="csm-help-text">
+                                        {__('If Coming Soon is selected then the site visitors will redirect to the dedicated page.', 'csm')}
+                                    </p>
+                                )}
+                            </PanelBody>
+                            
+                            {settings.csm_mode !== 'live' && (
+                                <>
+                                    <PanelBody title={__('Page Selection', 'csm')} initialOpen={true}>
+                                        <PanelRow>
+                                            <PageSelector 
+                                                pages={pages}
+                                                selectedPage={settings.csm_show_page}
+                                                onChange={(value) => handleChange('csm_show_page', value)}
+                                                label={__('Select Page', 'csm')}
+                                                help={__('The site visitors will be redirected to the selected page if Coming Soon mode is active.', 'csm')}
+                                            />
+                                        </PanelRow>
+                                        
+                                        <PanelRow>
+                                            <PageSelector 
+                                                pages={pages}
+                                                selectedPages={settings.csm_page}
+                                                onChange={(value) => handleChange('csm_page', value)}
+                                                label={__('Exclude Pages', 'csm')}
+                                                help={__('The site visitors will be able to access selected page even Coming Soon mode is active.', 'csm')}
+                                                isMulti={true}
+                                            />
+                                        </PanelRow>
+                                    </PanelBody>
+                                    
+                                    <PanelBody title={__('Live Site Access', 'csm')} initialOpen={true}>
+                                        <PanelRow>
+                                            <RadioControl
+                                                label={__('Who can access the live site?', 'csm')}
+                                                selected={settings.csm_who_can_access}
+                                                options={[
+                                                    { label: __('All logged-in users', 'csm'), value: 'logged' },
+                                                    { label: __('Custom', 'csm'), value: 'custom' }
+                                                ]}
+                                                onChange={(value) => handleChange('csm_who_can_access', value)}
+                                            />
+                                        </PanelRow>
+                                        
+                                        {settings.csm_who_can_access === 'custom' && (
+                                            <PanelRow>
+                                                <UserRoleSelector 
+                                                    roles={userRoles}
+                                                    selectedRoles={settings.csm_roles}
+                                                    onChange={(value) => handleChange('csm_roles', value)}
+                                                />
+                                            </PanelRow>
+                                        )}
+                                        
+                                        <p className="csm-help-text">
+                                            {__('Select the users who can access the live site even Coming Soon mode is activated.', 'csm')}
+                                        </p>
+                                    </PanelBody>
+                                    
+                                    <PanelBody title={__('Page Appearance', 'csm')} initialOpen={true}>
+                                        <PanelRow>
+                                            <RadioControl
+                                                label={__('Appearance Options', 'csm')}
+                                                selected={settings.csm_appearance}
+                                                options={[
+                                                    { label: __('Display Page Content Only', 'csm'), value: 'loadonly_content' },
+                                                    { label: __('More Custom Options', 'csm'), value: 'dis_more_option' }
+                                                ]}
+                                                onChange={(value) => handleChange('csm_appearance', value)}
+                                            />
+                                        </PanelRow>
+                                        
+                                        {settings.csm_appearance === 'dis_more_option' && (
+                                            <div className="csm-custom-options">
+                                                <CheckboxControl
+                                                    label={__('Disable Header', 'csm')}
+                                                    checked={settings.dis_header}
+                                                    onChange={(value) => handleChange('dis_header', value)}
+                                                />
+                                                
+                                                <CheckboxControl
+                                                    label={__('Disable Footer', 'csm')}
+                                                    checked={settings.dis_footer}
+                                                    onChange={(value) => handleChange('dis_footer', value)}
+                                                />
+                                                
+                                                <CheckboxControl
+                                                    label={__('Disable Sidebar', 'csm')}
+                                                    checked={settings.dis_sidebar}
+                                                    onChange={(value) => handleChange('dis_sidebar', value)}
+                                                />
+                                            </div>
+                                        )}
+                                        
+                                        <p className="csm-help-text">
+                                            {__('Make the selected page more interactive by controlling the website components.', 'csm')}
+                                        </p>
+                                    </PanelBody>
+                                </>
+                            )}
+                        </Panel>
+                    </CardBody>
+                    
+                    <CardFooter>
+                        <Button 
+                            isPrimary 
+                            type="submit" 
+                            isBusy={saving}
+                            disabled={saving}
+                        >
+                            {saving ? __('Saving...', 'csm') : __('Save Settings', 'csm')}
+                        </Button>
+                    </CardFooter>
+                </Card>
+            </form>
+            
+            <Footer />
+        </div>
+    );
+};
+
+export default App;

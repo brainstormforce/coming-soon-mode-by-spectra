@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Comin soon mode By Spectra Setting
+ * Coming Soon Mode By Spectra Setting
  *
  * PHP version 7.1
  *
@@ -13,64 +13,90 @@
  */
 
 /**
-Plugin Name: Coming Soon Mode by Spectra
-Plugin URI: https://brainstormforce.com/
-Description: Most lightweight Coming soon mode plugin ever by Spectra.
-Version: 1.0
-Author: Brainstorm Force
-Author URI: https://brainstormforce.com
-License: GPLv2 or later
-Text Domain: csm
+ * Plugin Name: Coming Soon Mode by Spectra
+ * Plugin URI: https://wordpress.org/plugins/coming-soon-mode-by-spectra/
+ * Description: Lightweight Coming Soon mode plugin to make your website inaccessible to the public while under development or maintenance.
+ * Version: 1.0.0
+ * Author: Brainstorm Force
+ * Author URI: https://brainstormforce.com
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: csm
+ * Domain Path: /languages
+ * Requires at least: 5.0
+ * Requires PHP: 5.6
+ * Tested up to: 6.4
  */
 
- /**
-  * Define constants
-  *
-  * @since  1.0.0
-  * @return void
-  */
-define('CSM_PLUGIN_DIR', plugin_dir_path(__FILE__)); 
-require_once(CSM_PLUGIN_DIR . '/admin.php');
-   
-add_action('template_redirect', 'csm_redirect');
+if ( ! defined( 'ABSPATH' ) ) {
+    exit; // Exit if accessed directly.
+}
+
+/**
+ * Define constants
+ */
+define( 'CSM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'CSM_PLUGIN_URL', plugins_url( '', __FILE__ ) );
+define( 'CSM_PLUGIN_VERSION', '1.0.0' );
+
+/**
+ * Include required files
+ */
+require_once CSM_PLUGIN_DIR . 'includes/class-csm-admin.php';
+require_once CSM_PLUGIN_DIR . 'includes/class-csm-rest-api.php';
+
+// For backward compatibility
+require_once CSM_PLUGIN_DIR . 'admin.php';
+
+/**
+ * Load plugin text domain
+ */
+function csm_load_textdomain() {
+    load_plugin_textdomain( 'csm', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+}
+add_action( 'plugins_loaded', 'csm_load_textdomain' );
 
 /**
  * Check if in admin panel or current page = page need redirect => do nothing
  *
  * @return void
  **/
-function csm_redirect()
-{
+function csm_redirect() {
     global $post;
-    $redirect_page_id = get_option('csm_show_page');  /* get option */
-    $selected=(array) get_option('csm_show_page');
-    $selected1 = (array)get_option('csm_page');
-    $csm_page = array_merge($selected, $selected1);
     
-    if (is_admin() || (int) $post->ID == (int)$redirect_page_id || in_array((int) $post->ID, $csm_page)  ) {
+    if ( ! $post ) {
+        return;
+    }
+    
+    $redirect_page_id = get_option( 'csm_show_page' );  /* get option */
+    $selected = (array) get_option( 'csm_show_page' );
+    $selected1 = (array) get_option( 'csm_page' );
+    $csm_page = array_merge( $selected, $selected1 );
+    
+    if ( is_admin() || (int) $post->ID == (int) $redirect_page_id || in_array( (int) $post->ID, $csm_page ) ) {
         return;
     }   
       
     $redirect = false; 
     /* set redirect false */
-    $csm_mode = get_option('csm_mode', 'live'); 
+    $csm_mode = get_option( 'csm_mode', 'live' ); 
     /* get option */
-    if ($csm_mode == 'comming-soon' || $csm_mode == 'maintainance') {
-        /* if Comming soon or Maintainance mode */
-        if (is_user_logged_in()) { 
+    if ( $csm_mode == 'comming-soon' || $csm_mode == 'maintainance' ) {
+        /* if Coming soon or Maintenance mode */
+        if ( is_user_logged_in() ) { 
             /* if user not login then redirect */
-            $csm_who_can_access = get_option('csm_who_can_access', 'logged');  
+            $csm_who_can_access = get_option( 'csm_who_can_access', 'logged' );  
             /* get option  */
             
-            if ($csm_who_can_access == 'custom') {
+            if ( $csm_who_can_access == 'custom' ) {
                 /* if custom role */
-                $csm_roles = is_array(get_option('csm_roles')) ? get_option('csm_roles') : array();
+                $csm_roles = is_array( get_option( 'csm_roles' ) ) ? get_option( 'csm_roles' ) : array();
                 /* get role list saved in settings */
                 $user = wp_get_current_user(); 
                 /* get current user info */
                 $user_role = $user->roles[0]; 
                 /*  current user role */
-                if (!in_array($user_role, $csm_roles)) {
+                if ( ! in_array( $user_role, $csm_roles ) ) {
                     /* if current user role is not in roles list in setting then redirect */
                     $redirect = true; 
                     /* set redirect true */
@@ -81,27 +107,24 @@ function csm_redirect()
             /* set redirect true */
         }
     }
-    if ($redirect) {
+    
+    if ( $redirect ) {
         /* if redirect = true => then redirect */
-        wp_redirect(esc_url(get_page_link($redirect_page_id)));
-        
+        wp_redirect( esc_url( get_page_link( $redirect_page_id ) ) );
         exit;
-    } 
-
-
+    }
 }
-add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'dd_add_plugin_page_settings_link');
+add_action( 'template_redirect', 'csm_redirect' );
 
 /**
- * Define constants
+ * Add settings link to plugin page
  *
- * @since  1.0.0
- * @return void
+ * @param array $links Plugin action links.
+ * @return array
  */
-function dd_Add_Plugin_Page_Settings_link($links)
-{
-    $links[] = '<a href="' .
-    admin_url('admin.php?page=csm-settings') .
-       '">' . __('Settings') . '</a>';
-       return $links;
+function csm_add_plugin_page_settings_link( $links ) {
+    $settings_link = '<a href="' . admin_url( 'options-general.php?page=csm-settings' ) . '">' . __( 'Settings', 'csm' ) . '</a>';
+    array_unshift( $links, $settings_link );
+    return $links;
 }
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'csm_add_plugin_page_settings_link' );
