@@ -85,6 +85,11 @@
     margin-top: 10px;
 }
 
+.csm-role-selector .react-select__control,
+.csm-custom-options .react-select__control {
+    width: 100%;
+}
+
 .csm-multi-select-container {
     max-height: 200px;
     overflow-y: auto;

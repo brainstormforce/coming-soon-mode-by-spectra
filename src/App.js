@@ -15,7 +15,6 @@ import {
     ToggleControl,
     RadioControl,
     SelectControl,
-    FormTokenField,
     Spinner,
     Notice
 } from '@wordpress/components';
@@ -28,6 +27,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import PageSelector from './components/PageSelector';
 import UserRoleSelector from './components/UserRoleSelector';
+import MultiSelect from './components/MultiSelect';
 import TabNavigation from './components/TabNavigation';
 
 const App = () => {
@@ -290,23 +290,23 @@ const App = () => {
                                     </PanelRow>
                                     {settings.csm_appearance === 'dis_more_option' && (
                                         <div className="csm-custom-options">
-                                            <FormTokenField
-                                                label={__('Disable Elements', 'csm')}
-                                                value={[
-                                                    settings.dis_header ? __('Disable Header', 'csm') : null,
-                                                    settings.dis_footer ? __('Disable Footer', 'csm') : null,
-                                                    settings.dis_sidebar ? __('Disable Sidebar', 'csm') : null,
-                                                ].filter(Boolean)}
-                                                suggestions={[
-                                                    __('Disable Header', 'csm'),
-                                                    __('Disable Footer', 'csm'),
-                                                    __('Disable Sidebar', 'csm'),
+                                            <MultiSelect
+                                                options={[
+                                                    { value: 'header', label: __('Disable Header', 'csm') },
+                                                    { value: 'footer', label: __('Disable Footer', 'csm') },
+                                                    { value: 'sidebar', label: __('Disable Sidebar', 'csm') },
                                                 ]}
-                                                onChange={(tokens) => {
-                                                    handleChange('dis_header', tokens.includes(__('Disable Header', 'csm')));
-                                                    handleChange('dis_footer', tokens.includes(__('Disable Footer', 'csm')));
-                                                    handleChange('dis_sidebar', tokens.includes(__('Disable Sidebar', 'csm')));
+                                                value={[
+                                                    settings.dis_header ? 'header' : null,
+                                                    settings.dis_footer ? 'footer' : null,
+                                                    settings.dis_sidebar ? 'sidebar' : null,
+                                                ].filter(Boolean)}
+                                                onChange={(values) => {
+                                                    handleChange('dis_header', values.includes('header'));
+                                                    handleChange('dis_footer', values.includes('footer'));
+                                                    handleChange('dis_sidebar', values.includes('sidebar'));
                                                 }}
+                                                placeholder={__('Disable Elements', 'csm')}
                                             />
                                         </div>
                                     )}
