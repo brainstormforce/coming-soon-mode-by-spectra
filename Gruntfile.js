@@ -13,6 +13,8 @@ module.exports = function( grunt ) {
                 expand: true,
                 src: [
                     '**',
+                    '!.git/**',
+                    '!release/**',
                     '!node_modules/**',
                     '!src/**',
                     '!assets/js/**',
