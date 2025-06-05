@@ -4,6 +4,7 @@
 
 /* General Styles */
 .csm-dashboard {
+    position: relative;
     max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
@@ -103,9 +104,7 @@
     margin-right: 8px;
 }
 
-.csm-roles-container {
-    margin-top: 10px;
-}
+
 
 /* Success Message */
 .csm-success-message {
@@ -176,7 +175,7 @@
 
 /* Sticky Save Button */
 .csm-sticky-save {
-    position: fixed;
+    position: absolute;
     bottom: 20px;
     right: 20px;
 }

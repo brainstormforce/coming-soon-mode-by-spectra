@@ -14,8 +14,8 @@ import {
     PanelRow,
     ToggleControl,
     RadioControl,
-    CheckboxControl,
     SelectControl,
+    FormTokenField,
     Spinner,
     Notice
 } from '@wordpress/components';
@@ -290,20 +290,23 @@ const App = () => {
                                     </PanelRow>
                                     {settings.csm_appearance === 'dis_more_option' && (
                                         <div className="csm-custom-options">
-                                            <CheckboxControl
-                                                label={__('Disable Header', 'csm')}
-                                                checked={settings.dis_header}
-                                                onChange={(value) => handleChange('dis_header', value)}
-                                            />
-                                            <CheckboxControl
-                                                label={__('Disable Footer', 'csm')}
-                                                checked={settings.dis_footer}
-                                                onChange={(value) => handleChange('dis_footer', value)}
-                                            />
-                                            <CheckboxControl
-                                                label={__('Disable Sidebar', 'csm')}
-                                                checked={settings.dis_sidebar}
-                                                onChange={(value) => handleChange('dis_sidebar', value)}
+                                            <FormTokenField
+                                                label={__('Disable Elements', 'csm')}
+                                                value={[
+                                                    settings.dis_header ? __('Disable Header', 'csm') : null,
+                                                    settings.dis_footer ? __('Disable Footer', 'csm') : null,
+                                                    settings.dis_sidebar ? __('Disable Sidebar', 'csm') : null,
+                                                ].filter(Boolean)}
+                                                suggestions={[
+                                                    __('Disable Header', 'csm'),
+                                                    __('Disable Footer', 'csm'),
+                                                    __('Disable Sidebar', 'csm'),
+                                                ]}
+                                                onChange={(tokens) => {
+                                                    handleChange('dis_header', tokens.includes(__('Disable Header', 'csm')));
+                                                    handleChange('dis_footer', tokens.includes(__('Disable Footer', 'csm')));
+                                                    handleChange('dis_sidebar', tokens.includes(__('Disable Sidebar', 'csm')));
+                                                }}
                                             />
                                         </div>
                                     )}
