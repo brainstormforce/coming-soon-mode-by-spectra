@@ -32,7 +32,7 @@
     align-items: center;
     margin-bottom: 30px;
     padding: 20px;
-    background: linear-gradient(90deg, #7f00ff, #e100ff);
+    background: linear-gradient(90deg, #8A2BE2, #DA70D6);
     border-radius: 8px;
     color: #fff;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -150,6 +150,35 @@
 
 .csm-footer-links a {
     margin: 0 10px;
+}
+
+/* Tab Navigation */
+.csm-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.csm-tab {
+    background: none;
+    border: none;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #4C51BF;
+    border-bottom: 3px solid transparent;
+}
+
+.csm-tab.active {
+    color: #000;
+    border-bottom-color: #4C51BF;
+}
+
+/* Sticky Save Button */
+.csm-sticky-save {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
 }
 
 /* Responsive Styles */
