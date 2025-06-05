@@ -24,7 +24,8 @@
 .csm-card {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     border-radius: 8px !important;
-    overflow: hidden;
+    /* Allow dropdown menus inside cards to extend beyond the card bounds */
+    overflow: visible;
 }
 
 /* Header Styles */
@@ -88,6 +89,11 @@
 .csm-role-selector .react-select__control,
 .csm-custom-options .react-select__control {
     width: 100%;
+}
+
+/* Ensure react-select dropdowns appear above the dashboard cards */
+.react-select__menu {
+    z-index: 100;
 }
 
 .csm-multi-select-container {
