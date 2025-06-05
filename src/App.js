@@ -202,29 +202,29 @@ const App = () => {
                                     </PanelBody>
 
                                     {settings.csm_template === 'page' && (
-                                        <>
-                                    <PanelBody title={__('Page Selection', 'csm')} initialOpen={true}>
-                                        <PanelRow>
-                                            <PageSelector
-                                                pages={pages}
-                                                selectedPage={settings.csm_show_page}
-                                                onChange={(value) => handleChange('csm_show_page', value)}
-                                                label={__('Select Page', 'csm')}
-                                                help={__('The site visitors will be redirected to the selected page if Coming Soon mode is active.', 'csm')}
-                                            />
-                                        </PanelRow>
-                                        
-                                        <PanelRow>
-                                            <PageSelector 
-                                                pages={pages}
-                                                selectedPages={settings.csm_page}
-                                                onChange={(value) => handleChange('csm_page', value)}
-                                                label={__('Exclude Pages', 'csm')}
-                                                help={__('The site visitors will be able to access selected page even Coming Soon mode is active.', 'csm')}
-                                                isMulti={true}
-                                            />
-                                        </PanelRow>
-                                    </PanelBody>
+                                        <PanelBody title={__('Page Selection', 'csm')} initialOpen={true}>
+                                            <PanelRow>
+                                                <PageSelector
+                                                    pages={pages}
+                                                    selectedPage={settings.csm_show_page}
+                                                    onChange={(value) => handleChange('csm_show_page', value)}
+                                                    label={__('Select Page', 'csm')}
+                                                    help={__('The site visitors will be redirected to the selected page if Coming Soon mode is active.', 'csm')}
+                                                />
+                                            </PanelRow>
+
+                                            <PanelRow>
+                                                <PageSelector
+                                                    pages={pages}
+                                                    selectedPages={settings.csm_page}
+                                                    onChange={(value) => handleChange('csm_page', value)}
+                                                    label={__('Exclude Pages', 'csm')}
+                                                    help={__('The site visitors will be able to access selected page even Coming Soon mode is active.', 'csm')}
+                                                    isMulti={true}
+                                                />
+                                            </PanelRow>
+                                        </PanelBody>
+                                    )}
 
                                     <PanelBody title={__('Live Site Access', 'csm')} initialOpen={true}>
                                         <PanelRow>
@@ -292,8 +292,6 @@ const App = () => {
                                             {__('Make the selected page more interactive by controlling the website components.', 'csm')}
                                         </p>
                                     </PanelBody>
-                                        </>
-                                    )}
                                 </>
                             )}
                         </Panel>
