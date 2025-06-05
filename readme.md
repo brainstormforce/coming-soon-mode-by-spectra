@@ -45,3 +45,7 @@ Yes absolutely. This plugin is free.
 
 ## Screenshots
 ![coming-soon-mode-1](https://user-images.githubusercontent.com/91533131/178202693-adf1fbdf-a66a-42af-9478-a980fc68b905.png)
+
+## Development
+
+Run `npm run build:zip` to build assets and package the plugin into `coming-soon-mode-by-spectra.zip`.
