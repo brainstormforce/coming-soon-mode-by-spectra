@@ -57,6 +57,31 @@ function csm_load_textdomain() {
 add_action( 'plugins_loaded', 'csm_load_textdomain' );
 
 /**
+ * Preview Coming Soon page without activating the mode
+ *
+ * @return void
+ */
+function csm_preview() {
+    if ( isset( $_GET['csm_preview'] ) && current_user_can( 'manage_options' ) ) {
+        $template         = get_option( 'csm_template', 'page' );
+        $redirect_page_id = get_option( 'csm_show_page' );
+
+        if ( 'page' === $template && $redirect_page_id ) {
+            wp_redirect( esc_url( get_page_link( $redirect_page_id ) ) );
+        } else {
+            $template_file = CSM_TEMPLATES_DIR . $template . '.php';
+            if ( file_exists( $template_file ) ) {
+                include $template_file;
+            } else {
+                wp_die( __( 'Coming Soon', 'csm' ) );
+            }
+        }
+        exit;
+    }
+}
+add_action( 'template_redirect', 'csm_preview', 0 );
+
+/**
  * Check if in admin panel or current page = page need redirect => do nothing
  *
  * @return void

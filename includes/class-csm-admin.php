@@ -78,6 +78,7 @@ class CSM_Admin {
                 'plugin_url' => plugins_url( '', dirname( __FILE__ ) ),
                 'nonce'      => wp_create_nonce( 'wp_rest' ),
                 'rest_url'   => esc_url_raw( rest_url() ),
+                'site_url'   => esc_url_raw( home_url( '/' ) ),
             )
         );
     }

@@ -298,13 +298,20 @@ const App = () => {
                     </CardBody>
                     
                     <CardFooter>
-                        <Button 
-                            isPrimary 
-                            type="submit" 
+                        <Button
+                            isPrimary
+                            type="submit"
                             isBusy={saving}
                             disabled={saving}
                         >
                             {saving ? __('Saving...', 'csm') : __('Save Settings', 'csm')}
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={() => window.open(`${csm_data.site_url}?csm_preview=1`, '_blank')}
+                            style={{ marginLeft: '8px' }}
+                        >
+                            {__('Preview', 'csm')}
                         </Button>
                     </CardFooter>
                 </Card>

@@ -28,6 +28,7 @@ Coming Soon Mode By Spectra is a standalone dedicated plugin for applying Coming
 	- Multiselect Page even coming soon mode is active.
         - Control Header, Footer & Sidebar Apperience of your selected page.
         - Built-in signup template with email capture.
+        - Preview Coming Soon page from the dashboard before activating.
 
 ## Privacy Statement
 
