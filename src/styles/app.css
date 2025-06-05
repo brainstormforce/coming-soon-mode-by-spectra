@@ -4,9 +4,13 @@
 
 /* General Styles */
 .csm-dashboard {
+    position: relative;
     max-width: 1200px;
     margin: 20px auto;
+    padding: 20px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    background: #f9f9f9;
+    border-radius: 8px;
 }
 
 .csm-loading {
@@ -20,7 +24,8 @@
 .csm-card {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     border-radius: 8px !important;
-    overflow: hidden;
+    /* Allow dropdown menus inside cards to extend beyond the card bounds */
+    overflow: visible;
 }
 
 /* Header Styles */
@@ -29,8 +34,9 @@
     align-items: center;
     margin-bottom: 30px;
     padding: 20px;
-    background: #fff;
+    background: linear-gradient(90deg, #8A2BE2, #DA70D6);
     border-radius: 8px;
+    color: #fff;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -41,17 +47,18 @@
 .csm-logo img {
     width: 60px;
     height: auto;
+    filter: brightness(0) invert(1);
 }
 
 .csm-header-content h1 {
     margin: 0 0 5px;
     font-size: 24px;
-    color: #1e1e1e;
+    color: #fff;
 }
 
 .csm-description {
     margin: 0;
-    color: #757575;
+    color: #f1f1f1;
     font-size: 14px;
 }
 
@@ -79,6 +86,16 @@
     margin-top: 10px;
 }
 
+.csm-role-selector .react-select__control,
+.csm-custom-options .react-select__control {
+    width: 100%;
+}
+
+/* Ensure react-select dropdowns appear above the dashboard cards */
+.react-select__menu {
+    z-index: 100;
+}
+
 .csm-multi-select-container {
     max-height: 200px;
     overflow-y: auto;
@@ -98,9 +115,7 @@
     margin-right: 8px;
 }
 
-.csm-roles-container {
-    margin-top: 10px;
-}
+
 
 /* Success Message */
 .csm-success-message {
@@ -110,6 +125,18 @@
 
 .csm-success-message svg {
     margin-right: 8px;
+}
+
+/* Signups Table */
+.csm-signups-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.csm-signups-table th,
+.csm-signups-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
 }
 
 /* Footer Styles */
@@ -133,6 +160,35 @@
 
 .csm-footer-links a {
     margin: 0 10px;
+}
+
+/* Tab Navigation */
+.csm-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.csm-tab {
+    background: none;
+    border: none;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #4C51BF;
+    border-bottom: 3px solid transparent;
+}
+
+.csm-tab.active {
+    color: #000;
+    border-bottom-color: #4C51BF;
+}
+
+/* Sticky Save Button */
+.csm-sticky-save {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
 }
 
 /* Responsive Styles */

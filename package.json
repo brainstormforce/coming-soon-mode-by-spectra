@@ -8,12 +8,17 @@
     "start": "wp-scripts start",
     "format": "wp-scripts format",
     "lint:js": "wp-scripts lint-js",
-    "lint:style": "wp-scripts lint-style"
+    "lint:style": "wp-scripts lint-style",
+    "build:zip": "npm run build && grunt package"
   },
   "author": "Brainstorm Force",
   "license": "GPL-2.0-or-later",
   "devDependencies": {
-    "@wordpress/scripts": "^26.0.0"
+    "@wordpress/scripts": "^26.0.0",
+    "grunt": "^1.6.1",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-compress": "^1.5.0"
   },
   "dependencies": {
     "@wordpress/api-fetch": "^6.0.0",
@@ -21,5 +26,7 @@
     "@wordpress/element": "^5.0.0",
     "@wordpress/i18n": "^4.0.0",
     "@wordpress/icons": "^9.0.0"
+    ,
+    "react-select": "^5.7.2"
   }
 }

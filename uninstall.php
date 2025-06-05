@@ -13,6 +13,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 // Delete all plugin options
 delete_option( 'csm_mode' );
 delete_option( 'csm_show_page' );
+delete_option( 'csm_template' );
 delete_option( 'csm_page' );
 delete_option( 'csm_who_can_access' );
 delete_option( 'csm_roles' );
@@ -20,3 +21,9 @@ delete_option( 'csm_appearance' );
 delete_option( 'dis_header' );
 delete_option( 'dis_footer' );
 delete_option( 'dis_sidebar' );
+
+// Delete signups
+$signups = get_posts( array( 'post_type' => 'csm_signup', 'numberposts' => -1 ) );
+foreach ( $signups as $signup ) {
+    wp_delete_post( $signup->ID, true );
+}

@@ -51,6 +51,16 @@ class CSM_REST_API {
                 'permission_callback' => array( $this, 'permissions_check' ),
             )
         );
+
+        register_rest_route(
+            'csm/v1',
+            '/signups',
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( $this, 'get_signups' ),
+                'permission_callback' => array( $this, 'permissions_check' ),
+            )
+        );
     }
 
     /**
@@ -72,6 +82,7 @@ class CSM_REST_API {
             'csm_mode'           => get_option( 'csm_mode', 'live' ),
             'csm_show_page'      => get_option( 'csm_show_page', '' ),
             'csm_page'           => get_option( 'csm_page', array() ),
+            'csm_template'       => get_option( 'csm_template', 'page' ),
             'csm_who_can_access' => get_option( 'csm_who_can_access', 'logged' ),
             'csm_roles'          => get_option( 'csm_roles', array() ),
             'csm_appearance'     => get_option( 'csm_appearance', 'loadonly_content' ),
@@ -100,6 +111,11 @@ class CSM_REST_API {
         // Update show page
         if ( isset( $params['csm_show_page'] ) ) {
             update_option( 'csm_show_page', sanitize_text_field( $params['csm_show_page'] ) );
+        }
+
+        // Update template
+        if ( isset( $params['csm_template'] ) ) {
+            update_option( 'csm_template', sanitize_text_field( $params['csm_template'] ) );
         }
 
         // Update excluded pages
@@ -150,6 +166,29 @@ class CSM_REST_API {
         }
 
         return rest_ensure_response( $roles );
+    }
+
+    /**
+     * Get waiting list signups
+     *
+     * @return WP_REST_Response
+     */
+    public function get_signups() {
+        $posts = get_posts( array(
+            'post_type'      => 'csm_signup',
+            'posts_per_page' => -1,
+        ) );
+
+        $data = array();
+        foreach ( $posts as $post ) {
+            $data[] = array(
+                'id'    => $post->ID,
+                'name'  => get_post_meta( $post->ID, 'name', true ),
+                'email' => $post->post_title,
+            );
+        }
+
+        return rest_ensure_response( $data );
     }
 }
 

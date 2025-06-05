@@ -38,15 +38,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'CSM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CSM_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 define( 'CSM_PLUGIN_VERSION', '1.0.0' );
+define( 'CSM_TEMPLATES_DIR', CSM_PLUGIN_DIR . 'templates/' );
 
 /**
  * Include required files
  */
 require_once CSM_PLUGIN_DIR . 'includes/class-csm-admin.php';
 require_once CSM_PLUGIN_DIR . 'includes/class-csm-rest-api.php';
+require_once CSM_PLUGIN_DIR . 'includes/class-csm-signup.php';
 
-// For backward compatibility
-require_once CSM_PLUGIN_DIR . 'admin.php';
 
 /**
  * Load plugin text domain
@@ -57,35 +57,57 @@ function csm_load_textdomain() {
 add_action( 'plugins_loaded', 'csm_load_textdomain' );
 
 /**
+ * Preview Coming Soon page without activating the mode
+ *
+ * @return void
+ */
+function csm_preview() {
+    if ( isset( $_GET['csm_preview'] ) && current_user_can( 'manage_options' ) ) {
+        $template         = get_option( 'csm_template', 'page' );
+        $redirect_page_id = get_option( 'csm_show_page' );
+
+        if ( 'page' === $template && $redirect_page_id ) {
+            wp_redirect( esc_url( get_page_link( $redirect_page_id ) ) );
+        } else {
+            $template_file = CSM_TEMPLATES_DIR . $template . '.php';
+            if ( file_exists( $template_file ) ) {
+                include $template_file;
+            } else {
+                wp_die( __( 'Coming Soon', 'csm' ) );
+            }
+        }
+        exit;
+    }
+}
+add_action( 'template_redirect', 'csm_preview', 0 );
+
+/**
  * Check if in admin panel or current page = page need redirect => do nothing
  *
  * @return void
  **/
 function csm_redirect() {
     global $post;
-    
-    if ( ! $post ) {
-        return;
-    }
-    
-    $redirect_page_id = get_option( 'csm_show_page' );  /* get option */
-    $selected = (array) get_option( 'csm_show_page' );
-    $selected1 = (array) get_option( 'csm_page' );
-    $csm_page = array_merge( $selected, $selected1 );
-    
-    if ( is_admin() || (int) $post->ID == (int) $redirect_page_id || in_array( (int) $post->ID, $csm_page ) ) {
-        return;
-    }   
-      
-    $redirect = false; 
-    /* set redirect false */
-    $csm_mode = get_option( 'csm_mode', 'live' ); 
-    /* get option */
-    if ( $csm_mode == 'comming-soon' || $csm_mode == 'maintainance' ) {
+
+    $csm_mode = get_option( 'csm_mode', 'live' );
+
+    if ( $csm_mode === 'comming-soon' || $csm_mode === 'maintainance' ) {
+        $template         = get_option( 'csm_template', 'page' );
+        $redirect_page_id = get_option( 'csm_show_page' );
+        $selected         = (array) get_option( 'csm_show_page' );
+        $selected1        = (array) get_option( 'csm_page' );
+        $csm_page         = array_merge( $selected, $selected1 );
+
+        if ( is_admin() || ( $post && (int) $post->ID == (int) $redirect_page_id ) || ( $post && in_array( (int) $post->ID, $csm_page ) ) ) {
+            return;
+        }
+
+        $redirect = false;
+
         /* if Coming soon or Maintenance mode */
-        if ( is_user_logged_in() ) { 
+        if ( is_user_logged_in() ) {
             /* if user not login then redirect */
-            $csm_who_can_access = get_option( 'csm_who_can_access', 'logged' );  
+            $csm_who_can_access = get_option( 'csm_who_can_access', 'logged' );
             /* get option  */
             
             if ( $csm_who_can_access == 'custom' ) {
@@ -106,12 +128,20 @@ function csm_redirect() {
             $redirect = true; 
             /* set redirect true */
         }
-    }
-    
-    if ( $redirect ) {
-        /* if redirect = true => then redirect */
-        wp_redirect( esc_url( get_page_link( $redirect_page_id ) ) );
-        exit;
+
+        if ( $redirect ) {
+            if ( 'page' === $template && $redirect_page_id ) {
+                wp_redirect( esc_url( get_page_link( $redirect_page_id ) ) );
+            } else {
+                $template_file = CSM_TEMPLATES_DIR . $template . '.php';
+                if ( file_exists( $template_file ) ) {
+                    include $template_file;
+                } else {
+                    wp_die( __( 'Coming Soon', 'csm' ) );
+                }
+            }
+            exit;
+        }
     }
 }
 add_action( 'template_redirect', 'csm_redirect' );

@@ -1,7 +1,0 @@
-.site-header,#site-header,.sidebar-main, #header,header,#footer,footer,.sidebar,#sidebar  .site-sidebar,#site-sidebar ,.site-footer,#site-footer{
-        display:none !important;
-        }
-        .content-area,#main,#primary{
-            width:100% !important;
-            margin:0px !important;
-        }

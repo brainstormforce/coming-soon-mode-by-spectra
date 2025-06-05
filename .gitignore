@@ -53,3 +53,4 @@ package-lock.json
 
 # Cache files
 .cache/
+release/
