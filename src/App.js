@@ -51,16 +51,18 @@ const App = () => {
     const [error, setError] = useState(null);
     const [pages, setPages] = useState([]);
     const [userRoles, setUserRoles] = useState([]);
+    const [signups, setSignups] = useState([]);
 
     // Fetch settings and data on component mount
     useEffect(() => {
         const fetchData = async () => {
             try {
                 // Fetch all data in parallel for faster loading
-                const [settingsResponse, pagesResponse, rolesResponse] = await Promise.all([
+                const [settingsResponse, pagesResponse, rolesResponse, signupsResponse] = await Promise.all([
                     apiFetch({ path: '/csm/v1/settings' }),
                     apiFetch({ path: '/wp/v2/pages?per_page=100' }),
-                    apiFetch({ path: '/csm/v1/roles' })
+                    apiFetch({ path: '/csm/v1/roles' }),
+                    apiFetch({ path: '/csm/v1/signups' })
                 ]);
                 
                 // Process the responses
@@ -73,6 +75,7 @@ const App = () => {
                 setPages(formattedPages);
                 
                 setUserRoles(rolesResponse);
+                setSignups(signupsResponse);
                 
                 // Hide loading state
                 setLoading(false);
@@ -190,7 +193,8 @@ const App = () => {
                                                 options={[
                                                     { label: __('Custom Page', 'csm'), value: 'page' },
                                                     { label: __('Minimal', 'csm'), value: 'minimal' },
-                                                    { label: __('Gradient', 'csm'), value: 'gradient' }
+                                                    { label: __('Gradient', 'csm'), value: 'gradient' },
+                                                    { label: __('Signup', 'csm'), value: 'signup' }
                                                 ]}
                                                 onChange={(value) => handleChange('csm_template', value)}
                                             />
@@ -307,7 +311,36 @@ const App = () => {
                     </CardFooter>
                 </Card>
             </form>
-            
+
+            <Card className="csm-card" style={{marginTop: '20px'}}>
+                <CardHeader>
+                    <h2>{__('Waiting List', 'csm')}</h2>
+                </CardHeader>
+                <CardBody>
+                    {signups.length === 0 && (
+                        <p>{__('No signups yet.', 'csm')}</p>
+                    )}
+                    {signups.length > 0 && (
+                        <table className="csm-signups-table">
+                            <thead>
+                                <tr>
+                                    <th>{__('Name', 'csm')}</th>
+                                    <th>{__('Email', 'csm')}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {signups.map((s) => (
+                                    <tr key={s.id}>
+                                        <td>{s.name}</td>
+                                        <td>{s.email}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                </CardBody>
+            </Card>
+
             <Footer />
         </div>
     );

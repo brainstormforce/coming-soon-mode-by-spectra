@@ -26,7 +26,8 @@ Coming Soon Mode By Spectra is a standalone dedicated plugin for applying Coming
 	- Compatible with any WordPress theme
 	- Live mode is accessible only to the selected user or logged-in user as per setting selection.
 	- Multiselect Page even coming soon mode is active.
-	- Control Header, Footer & Sidebar Apperience of your selected page. 
+        - Control Header, Footer & Sidebar Apperience of your selected page.
+        - Built-in signup template with email capture.
 
 ## Privacy Statement
 

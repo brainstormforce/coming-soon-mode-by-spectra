@@ -21,3 +21,9 @@ delete_option( 'csm_appearance' );
 delete_option( 'dis_header' );
 delete_option( 'dis_footer' );
 delete_option( 'dis_sidebar' );
+
+// Delete signups
+$signups = get_posts( array( 'post_type' => 'csm_signup', 'numberposts' => -1 ) );
+foreach ( $signups as $signup ) {
+    wp_delete_post( $signup->ID, true );
+}

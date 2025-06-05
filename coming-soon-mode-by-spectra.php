@@ -45,6 +45,7 @@ define( 'CSM_TEMPLATES_DIR', CSM_PLUGIN_DIR . 'templates/' );
  */
 require_once CSM_PLUGIN_DIR . 'includes/class-csm-admin.php';
 require_once CSM_PLUGIN_DIR . 'includes/class-csm-rest-api.php';
+require_once CSM_PLUGIN_DIR . 'includes/class-csm-signup.php';
 
 
 /**

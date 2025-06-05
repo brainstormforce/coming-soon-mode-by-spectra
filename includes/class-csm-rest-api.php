@@ -51,6 +51,16 @@ class CSM_REST_API {
                 'permission_callback' => array( $this, 'permissions_check' ),
             )
         );
+
+        register_rest_route(
+            'csm/v1',
+            '/signups',
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( $this, 'get_signups' ),
+                'permission_callback' => array( $this, 'permissions_check' ),
+            )
+        );
     }
 
     /**
@@ -156,6 +166,29 @@ class CSM_REST_API {
         }
 
         return rest_ensure_response( $roles );
+    }
+
+    /**
+     * Get waiting list signups
+     *
+     * @return WP_REST_Response
+     */
+    public function get_signups() {
+        $posts = get_posts( array(
+            'post_type'      => 'csm_signup',
+            'posts_per_page' => -1,
+        ) );
+
+        $data = array();
+        foreach ( $posts as $post ) {
+            $data[] = array(
+                'id'    => $post->ID,
+                'name'  => get_post_meta( $post->ID, 'name', true ),
+                'email' => $post->post_title,
+            );
+        }
+
+        return rest_ensure_response( $data );
     }
 }
 

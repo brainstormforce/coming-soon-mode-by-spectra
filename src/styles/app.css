@@ -117,6 +117,18 @@
     margin-right: 8px;
 }
 
+/* Signups Table */
+.csm-signups-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.csm-signups-table th,
+.csm-signups-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
 /* Footer Styles */
 .csm-footer {
     margin-top: 30px;

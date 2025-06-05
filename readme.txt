@@ -23,6 +23,7 @@ It is very lightweight (less than 5KB on the frontend side) and optimized for sp
 * Multiselect Page even when coming soon mode is active
 * Control Header, Footer & Sidebar appearance of your selected page
 * Built-in Coming Soon templates for quick start
+* Optional signup template collects visitor emails for launch notifications
 * Modern React-based admin interface
 * Lightweight and fast performance
 
