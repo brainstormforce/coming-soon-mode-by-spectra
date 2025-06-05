@@ -13,6 +13,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 // Delete all plugin options
 delete_option( 'csm_mode' );
 delete_option( 'csm_show_page' );
+delete_option( 'csm_template' );
 delete_option( 'csm_page' );
 delete_option( 'csm_who_can_access' );
 delete_option( 'csm_roles' );

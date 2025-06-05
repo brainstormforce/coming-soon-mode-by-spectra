@@ -35,6 +35,7 @@ const App = () => {
         csm_mode: 'live',
         csm_show_page: '',
         csm_page: [],
+        csm_template: 'page',
         csm_who_can_access: 'logged',
         csm_roles: [],
         csm_appearance: 'loadonly_content',
@@ -181,9 +182,26 @@ const App = () => {
                             
                             {settings.csm_mode !== 'live' && (
                                 <>
+                                    <PanelBody title={__('Template', 'csm')} initialOpen={true}>
+                                        <PanelRow>
+                                            <SelectControl
+                                                label={__('Choose Template', 'csm')}
+                                                value={settings.csm_template}
+                                                options={[
+                                                    { label: __('Custom Page', 'csm'), value: 'page' },
+                                                    { label: __('Minimal', 'csm'), value: 'minimal' },
+                                                    { label: __('Gradient', 'csm'), value: 'gradient' }
+                                                ]}
+                                                onChange={(value) => handleChange('csm_template', value)}
+                                            />
+                                        </PanelRow>
+                                    </PanelBody>
+
+                                    {settings.csm_template === 'page' && (
+                                        <>
                                     <PanelBody title={__('Page Selection', 'csm')} initialOpen={true}>
                                         <PanelRow>
-                                            <PageSelector 
+                                            <PageSelector
                                                 pages={pages}
                                                 selectedPage={settings.csm_show_page}
                                                 onChange={(value) => handleChange('csm_show_page', value)}
@@ -203,7 +221,7 @@ const App = () => {
                                             />
                                         </PanelRow>
                                     </PanelBody>
-                                    
+
                                     <PanelBody title={__('Live Site Access', 'csm')} initialOpen={true}>
                                         <PanelRow>
                                             <RadioControl
@@ -231,7 +249,6 @@ const App = () => {
                                             {__('Select the users who can access the live site even Coming Soon mode is activated.', 'csm')}
                                         </p>
                                     </PanelBody>
-                                    
                                     <PanelBody title={__('Page Appearance', 'csm')} initialOpen={true}>
                                         <PanelRow>
                                             <RadioControl
@@ -244,7 +261,7 @@ const App = () => {
                                                 onChange={(value) => handleChange('csm_appearance', value)}
                                             />
                                         </PanelRow>
-                                        
+
                                         {settings.csm_appearance === 'dis_more_option' && (
                                             <div className="csm-custom-options">
                                                 <CheckboxControl
@@ -266,11 +283,13 @@ const App = () => {
                                                 />
                                             </div>
                                         )}
-                                        
+
                                         <p className="csm-help-text">
                                             {__('Make the selected page more interactive by controlling the website components.', 'csm')}
                                         </p>
                                     </PanelBody>
+                                        </>
+                                    )}
                                 </>
                             )}
                         </Panel>

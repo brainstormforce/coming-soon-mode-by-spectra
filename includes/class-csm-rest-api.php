@@ -72,6 +72,7 @@ class CSM_REST_API {
             'csm_mode'           => get_option( 'csm_mode', 'live' ),
             'csm_show_page'      => get_option( 'csm_show_page', '' ),
             'csm_page'           => get_option( 'csm_page', array() ),
+            'csm_template'       => get_option( 'csm_template', 'page' ),
             'csm_who_can_access' => get_option( 'csm_who_can_access', 'logged' ),
             'csm_roles'          => get_option( 'csm_roles', array() ),
             'csm_appearance'     => get_option( 'csm_appearance', 'loadonly_content' ),
@@ -100,6 +101,11 @@ class CSM_REST_API {
         // Update show page
         if ( isset( $params['csm_show_page'] ) ) {
             update_option( 'csm_show_page', sanitize_text_field( $params['csm_show_page'] ) );
+        }
+
+        // Update template
+        if ( isset( $params['csm_template'] ) ) {
+            update_option( 'csm_template', sanitize_text_field( $params['csm_template'] ) );
         }
 
         // Update excluded pages
