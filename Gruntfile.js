@@ -1,9 +1,12 @@
 module.exports = function( grunt ) {
     const pluginSlug = 'coming-soon-mode-by-spectra';
+    const pkg = grunt.file.readJSON( 'package.json' );
+    const zipName = pluginSlug + '-' + pkg.version + '.zip';
 
     grunt.initConfig({
         clean: {
-            release: ['release/']
+            pre: [ 'release/', zipName ],
+            post: [ 'release/' ]
         },
         copy: {
             release: {
@@ -26,7 +29,7 @@ module.exports = function( grunt ) {
         compress: {
             main: {
                 options: {
-                    archive: pluginSlug + '.zip',
+                    archive: zipName,
                     mode: 'zip'
                 },
                 expand: true,
@@ -41,5 +44,5 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-compress');
 
-    grunt.registerTask('package', ['clean', 'copy', 'compress']);
+    grunt.registerTask( 'package', [ 'clean:pre', 'copy', 'compress', 'clean:post' ] );
 };

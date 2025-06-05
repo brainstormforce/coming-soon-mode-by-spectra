@@ -48,4 +48,4 @@ Yes absolutely. This plugin is free.
 
 ## Development
 
-Run `npm run build:zip` to build assets and package the plugin into `coming-soon-mode-by-spectra.zip`.
+Run `npm run build:zip` to build assets and package the plugin into `coming-soon-mode-by-spectra-<version>.zip` where `<version>` is taken from `package.json`.
